@@ -22,7 +22,14 @@ class ParseTestCase(unittest.TestCase):
                 '<Placemark>'
                   '<name>gx:altitudeMode Example</name>'
         )
-
+    
+    def test_parse_kml_file(self):
+        "Tests the parsing of a KML URL"
+        file = 'pykml/kml_gx/test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
+        with open(file) as f:
+            doc = parse(f, validate=True)
+        self.assertTrue(True)
+    
     def test_parse_kml_url_2(self):
         "Tests the parsing of a KML URL"
         url = 'http://code.google.com/apis/kml/documentation/kmlfiles/animatedupdate_example.kml'

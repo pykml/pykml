@@ -19,8 +19,12 @@
     schemaLocation="atom-author-link.xsd"/>
 
   <!-- import xAL:Address -->
+  <!-- The following import is modified so a local copy is used
   <import namespace="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0"
     schemaLocation="http://docs.oasis-open.org/election/external/xAL.xsd"/>
+  -->
+  <import namespace="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0"
+    schemaLocation="xAL.xsd"/>
 
   <!-- KML field types (simple content) -->
 
