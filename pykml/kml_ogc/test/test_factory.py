@@ -83,3 +83,31 @@ class KmlFactoryTestCase(unittest.TestCase):
             '</kml>'
         )
 
+class GeneratePythonScriptTestCase(unittest.TestCase):
+    
+    def test_write_python_script_for_kml_document(self):
+        """Tests the creation of a trivial OGC KML document."""
+        from pykml.kml_ogc.factory import write_python_script_for_kml_document
+        
+        doc = K.kml(
+            K.Document(
+                ATOM.author(
+                    ATOM.name("J. K. Rowling")
+                ),
+                ATOM.link(href="http://www.harrypotter.com"),
+                K.Placemark(
+                    K.name("Hogwarts"),
+                    K.Point(
+                        K.coordinates("1,1")
+                    )
+                )
+            )
+        )
+        script = write_python_script_for_kml_document(doc)
+        self.assertEquals(
+            script,
+            'some python code...'
+        )
+
+if __name__ == '__main__':
+    unittest.main()
