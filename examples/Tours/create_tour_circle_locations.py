@@ -11,11 +11,6 @@ GX_ns = "{http://www.google.com/kml/ext/2.2}"
 
 feature_list = [
     {
-        'name':"Tylers PhD Plumbing Project1",
-        'desc':'Niwot Ridge, Colorado, USA',
-        'lon':-105.57102, 'lat':40.047817, 'tilt':45, 'range':300,
-    },
-    {
         'name':"Half Dome",
         'desc':'Northern Territory, central Australia',
         'lon':-119.53417,'lat':37.744728, 'tilt':45, 'range':3000,
@@ -24,21 +19,6 @@ feature_list = [
         'name':"Ayers Rock",
         'desc':'Northern Territory, central Australia',
         'lon':131.035,'lat':-25.345, 'tilt':88, 'range':5000,
-    },
-    {
-        'name':"Manicouagan Crater",
-        'desc':'Quebec, Canada',
-        'lon':-68.7, 'lat':51.38, 'tilt':45, 'range':100000,
-    },
-    {
-        'name':"Landscape Arch",
-        'desc':'Arches National Park, Utah, USA',
-        'lon':-109.607,'lat':38.791, 'tilt':60, 'range':500,
-    },
-    {
-        'name':"Mt. Etna",
-        'desc':'Sicily, Italy',
-        'lon':14.995, 'lat':37.752, 'tilt':75, 'range':4000,
     },
     {
         'name':"Barbs Fabulous Faults for Mapping",
@@ -51,10 +31,20 @@ feature_list = [
         'lon':-115.57914, 'lat':32.459667, 'tilt':30, 'range':50000,
     },
     {
-        'name':"Tylers PhD Plumbing Project",
-        'desc':'Niwot Ridge, Colorado, USA',
-        'lon':-105.57102, 'lat':40.047817, 'tilt':30, 'range':300,
+        'name':"Landscape Arch",
+        'desc':'Arches National Park, Utah, USA',
+        'lon':-109.607,'lat':38.791, 'tilt':60, 'range':500,
     },
+    {
+        'name':"Manicouagan Crater",
+        'desc':'Quebec, Canada',
+        'lon':-68.7, 'lat':51.38, 'tilt':45, 'range':100000,
+    },
+#    {
+#        'name':"Tylers PhD Plumbing Project",
+#        'desc':'Niwot Ridge, Colorado, USA',
+#        'lon':-105.57102, 'lat':40.047817, 'tilt':30, 'range':300,
+#    },
     {
         'name':"Upheaval Dome",
         'desc':'Canyonlands National Park, Utah, USA',
