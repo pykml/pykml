@@ -55,37 +55,29 @@ def write_python_script_for_kml_document(doc):
     indent_size = 2
     
     # add the namespace declaration section
-    output.write('from pykml.kml_ogc.factory import KML_ElementMaker as K\n')
-    output.write('from pykml.kml_ogc.factory import ATOM_ElementMaker as ATOM\n')
+    output.write('from pykml.kml_gx.factory import KML_ElementMaker as KML\n')
+    output.write('from pykml.kml_gx.factory import ATOM_ElementMaker as ATOM\n')
+    output.write('from pykml.kml_gx.factory import GX_ElementMaker as GX\n')
     output.write('\n')
     
     level = 0
-    events = ("start", "end")
-    context = etree.iterwalk(doc, events=events)
+    context = etree.iterwalk(doc, events=("start", "end"))
     output.write('doc = ')
-    #import ipdb; ipdb.set_trace()
     last_action = None
     for action, elem in context:
         if action in ('start','end'):
             namespace, element_name = separate_namespace(elem.tag)
             if action in ('start'):
-                if last_action==None:
-                    newline = ''
+                if last_action == None:
                     indent = ''
-                elif last_action=='start':
-                    newline = '\n'
-                    indent = ' ' * level * indent_size
                 else:
-                    newline = ',\n'
                     indent = ' ' * level * indent_size
                 level += 1
-                
                 if elem.text:
                     text = '"{0}"'.format(elem.text)
                 else:
                     text = ''
-                output.write('{newline}{indent}{factory}.{tag}({text}'.format(
-                    newline = newline,
+                output.write('{indent}{factory}.{tag}({text}\n'.format(
                     indent = indent,
                     factory = get_factory_object(namespace),
                     tag = element_name,
@@ -94,27 +86,20 @@ def write_python_script_for_kml_document(doc):
             elif action in ('end'):
                 level -= 1
                 if last_action == 'start':
-                    newline1 = ''
+                    output.pos -= 1
                     indent = ''
-                    newline2 = ''
                 else:
-                    newline1 = '\n'
                     indent = ' ' * level * indent_size
-                    newline2 = ''
-                output.write('{newline1}{indent}){newline2}'.format(
-                    newline1 = newline1,
-                    indent = indent,
-                    newline2 = newline2
-                ))
-                
-#        elif action == 'start-ns':
-#            print("Level {level} - {action}: {elem}".format(
-#                level=level, action=action, elem=elem)
-#            )
-#        else:
-#            print(action)
-#            pass
+                for att,val in elem.items():
+                    output.write('{0}{1}="{2}",'.format(indent,att,val))
+                output.write('{0}),\n'.format(indent))
         last_action = action
-    import ipdb; ipdb.set_trace()
+    # remove the last comma
+    output.pos -= 2
+    output.truncate()
+    output.write('\n\n')
+    # add python code to print out the KML document
+    output.write('from lxml import etree\n')
+    output.write('print etree.tostring(doc,pretty_print=True)\n')
     
-    return str
+    return output.getvalue()

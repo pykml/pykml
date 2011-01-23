@@ -106,8 +106,44 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         script = write_python_script_for_kml_document(doc)
         self.assertEquals(
             script,
-            'some python code...'
+            'from pykml.kml_gx.factory import KML_ElementMaker as KML\n'
+            'from pykml.kml_gx.factory import ATOM_ElementMaker as ATOM\n'
+            'from pykml.kml_gx.factory import GX_ElementMaker as GX\n'
+            '\n'
+            'doc = KML.kml(\n'
+            '  KML.Document(\n'
+            '    ATOM.author(\n'
+            '      ATOM.name("J. K. Rowling"),\n'
+            '    ),\n'
+            '    ATOM.link(href="http://www.harrypotter.com",),\n'
+            '    KML.Placemark(\n'
+            '      KML.name("Hogwarts"),\n'
+            '      KML.Point(\n'
+            '        KML.coordinates("1,1"),\n'
+            '      ),\n'
+            '    ),\n'
+            '  ),\n'
+            ')\n'
+            '\n'
+            'from lxml import etree\n'
+            'print etree.tostring(doc,pretty_print=True)\n'
         )
+
+    def test_write_python_script_for_kml_document_with_cdata(self):
+        """Tests the creation of an OGC KML document with a cdata tag"""
+
+    """
+    <Style id="noDrivingDirections">
+      <BalloonStyle>
+        <text><![CDATA[
+          <b>$[name]</b>
+          <br /><br />
+          $[description]
+        ]]></text>
+      </BalloonStyle>
+    </Style>
+    """
+    pass
 
 if __name__ == '__main__':
     unittest.main()
