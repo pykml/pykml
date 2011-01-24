@@ -1,4 +1,4 @@
-from pykml.kml_ogc.factory import KML_ElementMaker as K
+from pykml.factory import KML_ElementMaker as K
 
 def set_max_decimal_places(doc, max_decimals=4):
     "Reduces the number of decimal places used in elements"

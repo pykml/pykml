@@ -1,19 +1,22 @@
 import unittest
 from lxml import etree
 
-from pykml.kml_ogc import schema
-from pykml.kml_ogc.factory import KML_ElementMaker as K
-from pykml.kml_ogc.factory import ATOM_ElementMaker as ATOM
+from pykml import schema_ogc
+from pykml import schema_gx
+from pykml.factory import KML_ElementMaker as K
+from pykml.factory import ATOM_ElementMaker as ATOM
+from pykml.factory import GX_ElementMaker as GX
 
 class KmlFactoryTestCase(unittest.TestCase):
     
     def test_trivial_kml_document(self):
         """Tests the creation of a trivial OGC KML document."""
         doc = K.kml()
-        self.assertTrue(schema.validate(doc))
+        self.assertTrue(schema_ogc.validate(doc))
         self.assertEquals(
             etree.tostring(doc),
-            '<kml xmlns:atom="http://www.w3.org/2005/Atom" '
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                 'xmlns:atom="http://www.w3.org/2005/Atom" '
                  'xmlns="http://www.opengis.net/kml/2.2"/>'
         )
     
@@ -30,10 +33,11 @@ class KmlFactoryTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertTrue(schema.validate(doc))
+        self.assertTrue(schema_gx.validate(doc))
         self.assertEquals(
             etree.tostring(doc),
-            '<kml xmlns:atom="http://www.w3.org/2005/Atom" '
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                 'xmlns:atom="http://www.w3.org/2005/Atom" '
                  'xmlns="http://www.opengis.net/kml/2.2">'
               '<Document>'
                 '<name>KmlFile</name>'
@@ -44,6 +48,65 @@ class KmlFactoryTestCase(unittest.TestCase):
                   '</Point>'
                 '</Placemark>'
               '</Document>'
+            '</kml>'
+        )
+    
+    def test_basic_kml_document(self):
+        """Tests the creation of a basic KML with Google Extensions ."""
+        doc = K.kml(
+            GX.Tour(
+                GX.Playlist(
+                    GX.SoundCue(
+                        K.href("http://dev.keyhole.com/codesite/cntowerfacts.mp3")
+                    ),
+                    GX.Wait(
+                        GX.duration(10)
+                    ),
+                    GX.FlyTo(
+                        GX.duration(5),
+                        GX.flyToMode("bounce"),
+                        K.LookAt(
+                            K.longitude(-79.387),
+                            K.latitude(43.643),
+                            K.altitude(0),
+                            K.heading(-172.3),
+                            K.tilt(10),
+                            K.range(1200),
+                            K.altitudeMode("relativeToGround"),
+                        )
+                    )
+                )
+            )
+        )
+        self.assertTrue(schema_gx.validate(doc))
+        self.assertEquals(
+            etree.tostring(doc),
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                 'xmlns:atom="http://www.w3.org/2005/Atom" '
+                 'xmlns="http://www.opengis.net/kml/2.2">'
+              '<gx:Tour>'
+                '<gx:Playlist>'
+                  '<gx:SoundCue>'
+                    '<href>http://dev.keyhole.com/codesite/cntowerfacts.mp3</href>'
+                  '</gx:SoundCue>'
+                  '<gx:Wait>'
+                    '<gx:duration>10</gx:duration>'
+                  '</gx:Wait>'
+                  '<gx:FlyTo>'
+                    '<gx:duration>5</gx:duration>'
+                    '<gx:flyToMode>bounce</gx:flyToMode>'
+                    '<LookAt>'
+                      '<longitude>-79.387</longitude>'
+                      '<latitude>43.643</latitude>'
+                      '<altitude>0</altitude>'
+                      '<heading>-172.3</heading>'
+                      '<tilt>10</tilt>'
+                      '<range>1200</range>'
+                      '<altitudeMode>relativeToGround</altitudeMode>'
+                    '</LookAt>'
+                  '</gx:FlyTo>'
+                '</gx:Playlist>'
+              '</gx:Tour>'
             '</kml>'
         )
     
@@ -63,10 +126,11 @@ class KmlFactoryTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertTrue(schema.validate(doc))
+        self.assertTrue(schema_ogc.validate(doc))
         self.assertEquals(
             etree.tostring(doc),
-            '<kml xmlns:atom="http://www.w3.org/2005/Atom" '
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                 'xmlns:atom="http://www.w3.org/2005/Atom" '
                  'xmlns="http://www.opengis.net/kml/2.2">'
               '<Document>'
                 '<atom:author>'
@@ -87,7 +151,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
     
     def test_write_python_script_for_kml_document(self):
         """Tests the creation of a trivial OGC KML document."""
-        from pykml.kml_ogc.factory import write_python_script_for_kml_document
+        from pykml.factory import write_python_script_for_kml_document
         
         doc = K.kml(
             K.Document(

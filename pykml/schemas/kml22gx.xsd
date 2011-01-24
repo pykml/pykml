@@ -31,7 +31,7 @@
     schemaLocation="http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd"/>
   -->
   <import namespace="http://www.opengis.net/kml/2.2"
-    schemaLocation="../../kml_ogc/schemas/ogckml22.xsd"/>
+    schemaLocation="../schemas/ogckml22.xsd"/>
 
    <!-- Simple types -->
   <simpleType name="altitudeModeEnumType">

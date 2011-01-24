@@ -1,6 +1,6 @@
 '''
-Create LXML ElementMaker objects that create KML objects using the 
-appropriate namespace
+Create LXML ElementMaker (factory) objects that create KML objects using the 
+appropriate namespaces
 '''
 
 from lxml import etree, objectify
@@ -8,6 +8,7 @@ from lxml import etree, objectify
 nsmap={
     None: "http://www.opengis.net/kml/2.2",
     'atom': "http://www.w3.org/2005/Atom",
+    'gx': "http://www.google.com/kml/ext/2.2",
 }
 
 # create a factory object for creating objects in the KML namespace
@@ -16,12 +17,17 @@ KML_ElementMaker = objectify.ElementMaker(
     namespace=nsmap[None],
     nsmap=nsmap,
 )
-
 # create a factory object for creating objects in the ATOM namespace
 ATOM_ElementMaker = objectify.ElementMaker(
     annotate=False,
     namespace="http://www.w3.org/2005/Atom",
-    nsmap={'atom': "http://www.w3.org/2005/Atom"}
+    nsmap={'atom': "http://www.w3.org/2005/Atom"},
+)
+# Create a factory object for the KML Google Extension namespace
+GX_ElementMaker = objectify.ElementMaker(
+    annotate=False,
+    namespace="http://www.google.com/kml/ext/2.2",
+    nsmap={'gx': "http://www.google.com/kml/ext/2.2"},
 )
 
 def write_python_script_for_kml_document(doc):
