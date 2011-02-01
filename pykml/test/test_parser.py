@@ -1,0 +1,128 @@
+import unittest
+import urllib2
+from StringIO import StringIO
+from lxml import etree
+from pykml.parser import Schema
+from pykml.parser import fromstring
+from pykml.parser import parse
+
+class ValidatorTestCase(unittest.TestCase):
+    
+    def test_initialize_schema(self):
+        """Tests the creation Schema instance"""
+        schema = Schema("ogckml22.xsd")
+        self.assertTrue(isinstance(schema.schema, etree.XMLSchema))
+    
+class ParseKmlOgcTestCase(unittest.TestCase):
+    "A collection of tests related to parsing KML OGC documents"
+    
+    def test_fromstring_kml_document(self):
+        "Tests the parsing of an valid KML string"
+        test_kml = '<kml xmlns="http://www.opengis.net/kml/2.2"/>'
+        schema = Schema("ogckml22.xsd")
+        tree = fromstring(test_kml, schema=schema)
+        self.assertEquals(etree.tostring(tree), test_kml)
+        tree = fromstring(test_kml)
+        self.assertEquals(etree.tostring(tree), test_kml)
+    
+    def test_fromstring_invalid_kml_document(self):
+        "Tests the parsing of an invalid KML string"
+        test_kml = '<bad_element />'
+        schema = Schema("ogckml22.xsd")
+        try:
+            tree = fromstring(test_kml, schema=schema)
+            self.assertTrue(False)
+        except etree.XMLSyntaxError:
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)
+    
+    def test_parse_kml_document(self):
+        "Tests the parsing of an valid KML file object"
+        test_kml = '<kml xmlns="http://www.opengis.net/kml/2.2"/>'
+        fileobject = StringIO(test_kml)
+        schema = Schema("ogckml22.xsd")
+        tree = parse(fileobject, schema=schema)
+        self.assertEquals(etree.tostring(tree), test_kml)
+        tree = parse(fileobject, schema=schema)
+        self.assertEquals(etree.tostring(tree), test_kml)
+    
+    def test_parse_invalid_kml_document(self):
+        "Tests the parsing of an invalid KML document"
+        fileobject = StringIO('<bad_element />')
+        try:
+            tree = parse(fileobject, schema=Schema("ogckml22.xsd"))
+            self.assertTrue(False)
+        except etree.XMLSyntaxError:
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)
+    
+    def test_parse_kml_url(self):
+        "Tests the parsing of a KML URL"
+        url = 'http://code.google.com/apis/kml/documentation/KML_Samples.kml'
+        #url = 'http://kml-samples.googlecode.com/svn/trunk/kml/Document/doc-with-id.kml'
+        #url = 'http://code.google.com/apis/kml/documentation/kmlfiles/altitudemode_reference.kml'
+        #url = 'http://code.google.com/apis/kml/documentation/kmlfiles/animatedupdate_example.kml'
+        fileobject = urllib2.urlopen(url)
+        tree = parse(fileobject, schema=Schema("ogckml22.xsd"))
+        self.assertEquals(
+            etree.tostring(tree)[:78],
+            '<kml xmlns="http://www.opengis.net/kml/2.2">'
+              '<Document>'
+                '<name>KML Samples</name>'
+        )
+    
+    def test_parse_invalid_ogc_kml_document(self):
+        """Tests the parsing of an invalid KML document.  Note that this KML
+        document uses elements that are not in the OGC KML spec.
+        """
+        url = 'http://code.google.com/apis/kml/documentation/kmlfiles/altitudemode_reference.kml'
+        fileobject = urllib2.urlopen(url)
+        try:
+            tree = parse(fileobject, schema=Schema("ogckml22.xsd"))
+            self.assertTrue(False)
+        except etree.XMLSyntaxError:
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)
+
+class ParseKmlGxTestCase(unittest.TestCase):
+    "A collection of tests related to parsing KML Google Extension documents"
+
+    def test_parse_kml_url(self):
+        "Tests the parsing of a KML URL"
+        url = 'http://code.google.com/apis/kml/documentation/kmlfiles/altitudemode_reference.kml'
+        fileobject = urllib2.urlopen(url)
+        tree = parse(fileobject, schema=Schema('kml22gx.xsd'))
+        self.assertEquals(
+            etree.tostring(tree)[:185],
+            '<kml xmlns="http://www.opengis.net/kml/2.2" '
+                 'xmlns:gx="http://www.google.com/kml/ext/2.2">'
+                '<!-- required when using gx-prefixed elements -->'
+                '<Placemark>'
+                  '<name>gx:altitudeMode Example</name>'
+        )
+    
+    def test_parse_kml_file(self):
+        "Tests the parsing of a KML URL"
+        file = 'pykml/kml_gx/test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
+        with open(file) as f:
+            doc = parse(f, schema=Schema('kml22gx.xsd'))
+        self.assertTrue(True)
+    
+    def test_parse_kml_url_2(self):
+        "Tests the parsing of a KML URL"
+        url = 'http://code.google.com/apis/kml/documentation/kmlfiles/animatedupdate_example.kml'
+        fileobject = urllib2.urlopen(url)
+        tree = parse(fileobject, schema=Schema('kml22gx.xsd'))
+        self.assertEquals(
+            etree.tostring(tree)[:137],
+            '<kml xmlns="http://www.opengis.net/kml/2.2" '
+                 'xmlns:gx="http://www.google.com/kml/ext/2.2">'
+                '<Document>'
+                  '<name>gx:AnimatedUpdate example</name>'
+        )
+
+if __name__ == '__main__':
+    unittest.main()
