@@ -1,5 +1,15 @@
 from pykml.factory import KML_ElementMaker as K
 
+def separate_namespace(qname):
+    "Separate the namespace from the element"
+    import re
+    try:
+        namespace, element_name = re.search('^{(.+)}(.+)$', qname).groups()
+    except:
+        namespace = None
+        element_name = qname
+    return namespace, element_name
+
 def set_max_decimal_places(doc, max_decimals=4):
     "Reduces the number of decimal places used in elements"
     

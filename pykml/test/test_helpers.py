@@ -7,6 +7,18 @@ from pykml.parser import fromstring
 
 class KmlHelpersTestCase(unittest.TestCase):
     
+    def test_separate_namespace(self):
+        """Tests the function that separates namespaces from qualified names"""
+        from pykml.helpers import separate_namespace
+        
+        namespace, element_name = separate_namespace('{garden}eggplant')
+        self.assertEqual(namespace, 'garden')
+        self.assertEqual(element_name, 'eggplant')
+        
+        namespace, element_name = separate_namespace('eggplant')
+        self.assertEqual(namespace, None)
+        self.assertEqual(element_name, 'eggplant')
+    
     def test_set_max_decimal_places(self):
         """Tests setting the number of decimal places in a document"""
         
