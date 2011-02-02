@@ -1,14 +1,16 @@
 import unittest
-from pykml.kml_ogc.parser import parse
+from pykml.parser import Schema
+from pykml.parser import parse
+
 
 class KmlUtilTestCase(unittest.TestCase):
     
     def test_count_elements(self):
         """Tests the counting of elements in a KML document."""
-        from pykml.kml_ogc.util import count_elements
+        from pykml.util import count_elements
         
-        with open('pykml/kml_gx/test/testfiles/google_kml_developers_guide/complete_tour_example.kml') as f:
-            doc = parse(f, validate=False)
+        with open('test/testfiles/google_kml_developers_guide/complete_tour_example.kml') as f:
+            doc = parse(f, schema=Schema('kml22gx.xsd'))
         summary = count_elements(doc)
         
         self.assertTrue(summary.has_key('http://www.opengis.net/kml/2.2'))

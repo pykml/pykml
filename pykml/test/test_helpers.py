@@ -1,18 +1,16 @@
 import unittest
-#from lxml import etree
-
-#from pykml.kml_ogc import schema
-#from pykml.kml_ogc.factory import KML_ElementMaker as K
-#from pykml.kml_ogc.factory import ATOM_ElementMaker as ATOM
-
-from pykml.kml_ogc.parser import fromstring
+from pykml.factory import KML_ElementMaker as K
+from pykml.factory import ATOM_ElementMaker as ATOM
+from pykml.factory import GX_ElementMaker as GX
+from pykml.parser import Schema
+from pykml.parser import fromstring
 
 class KmlHelpersTestCase(unittest.TestCase):
     
-    def test_trivial_kml_document(self):
-        """Tests the creation of a trivial OGC KML document."""
+    def test_set_max_decimal_places(self):
+        """Tests setting the number of decimal places in a document"""
         
-        from pykml.kml_ogc.helpers import set_max_decimal_places
+        from pykml.helpers import set_max_decimal_places
         
         test_kml = (
             '<?xml version="1.0" encoding="UTF-8"?>'
@@ -40,7 +38,7 @@ class KmlHelpersTestCase(unittest.TestCase):
                 '</Document>'
                 '</kml>'
         )
-        doc = fromstring(test_kml, validate=True)
+        doc = fromstring(test_kml, schema=Schema("ogckml22.xsd"))
         set_max_decimal_places(doc, max_decimals=4)
         
         # test that the number of decimal places is four
@@ -68,7 +66,6 @@ class KmlHelpersTestCase(unittest.TestCase):
             doc.find(".//{http://www.opengis.net/kml/2.2}range"),
             236.1427
         )
-        #import ipdb; ipdb.set_trace()
         self.assertEquals(
             doc.find(".//{http://www.opengis.net/kml/2.2}coordinates"),
             "-105.6381,40.2554,3826.9979"

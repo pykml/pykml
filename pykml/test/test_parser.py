@@ -6,21 +6,22 @@ from pykml.parser import Schema
 from pykml.parser import fromstring
 from pykml.parser import parse
 
+
 class ValidatorTestCase(unittest.TestCase):
     
     def test_initialize_schema(self):
         """Tests the creation Schema instance"""
         schema = Schema("ogckml22.xsd")
         self.assertTrue(isinstance(schema.schema, etree.XMLSchema))
-    
+
+
 class ParseKmlOgcTestCase(unittest.TestCase):
     "A collection of tests related to parsing KML OGC documents"
     
     def test_fromstring_kml_document(self):
         "Tests the parsing of an valid KML string"
         test_kml = '<kml xmlns="http://www.opengis.net/kml/2.2"/>'
-        schema = Schema("ogckml22.xsd")
-        tree = fromstring(test_kml, schema=schema)
+        tree = fromstring(test_kml, schema=Schema("ogckml22.xsd"))
         self.assertEquals(etree.tostring(tree), test_kml)
         tree = fromstring(test_kml)
         self.assertEquals(etree.tostring(tree), test_kml)
@@ -28,9 +29,8 @@ class ParseKmlOgcTestCase(unittest.TestCase):
     def test_fromstring_invalid_kml_document(self):
         "Tests the parsing of an invalid KML string"
         test_kml = '<bad_element />'
-        schema = Schema("ogckml22.xsd")
         try:
-            tree = fromstring(test_kml, schema=schema)
+            tree = fromstring(test_kml, schema=Schema("ogckml22.xsd"))
             self.assertTrue(False)
         except etree.XMLSyntaxError:
             self.assertTrue(True)
@@ -89,7 +89,7 @@ class ParseKmlOgcTestCase(unittest.TestCase):
 
 class ParseKmlGxTestCase(unittest.TestCase):
     "A collection of tests related to parsing KML Google Extension documents"
-
+    
     def test_parse_kml_url(self):
         "Tests the parsing of a KML URL"
         url = 'http://code.google.com/apis/kml/documentation/kmlfiles/altitudemode_reference.kml'
@@ -106,7 +106,7 @@ class ParseKmlGxTestCase(unittest.TestCase):
     
     def test_parse_kml_file(self):
         "Tests the parsing of a KML URL"
-        file = 'pykml/kml_gx/test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
+        file = 'test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
         with open(file) as f:
             doc = parse(f, schema=Schema('kml22gx.xsd'))
         self.assertTrue(True)

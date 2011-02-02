@@ -30,3 +30,4 @@ def set_max_decimal_places(doc, max_decimals=4):
             ]) for vertex in el.text.split(' ')
         ])
         el.getparent().coordinates = K.coordinates(new_coord_string)
+

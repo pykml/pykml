@@ -3,7 +3,6 @@ Parse KML file objects
 '''
 import os
 from lxml import etree, objectify
-#from __init__ import schema
 
 class Schema():
     "Validate documents via an XML Schema"
@@ -13,13 +12,9 @@ class Schema():
         with open(schema_file) as f:
             self.schema = etree.XMLSchema(file=f)
     
-    def schema(self):
-        return self.schema
-    
-#    def __call__(self):
-#        import ipdb; ipdb.set_trace()
-#        return self.schema
-
+    def validate(self, doc):
+        "Validate an XML document"
+        return self.schema.validate(doc)
 
 def fromstring(text, schema=None):
     "Parses a file object using the KML OGC schema"

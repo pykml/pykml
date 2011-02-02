@@ -1,8 +1,6 @@
 import unittest
 from lxml import etree
-
-from pykml import schema_ogc
-from pykml import schema_gx
+from pykml.parser import Schema
 from pykml.factory import KML_ElementMaker as K
 from pykml.factory import ATOM_ElementMaker as ATOM
 from pykml.factory import GX_ElementMaker as GX
@@ -12,7 +10,8 @@ class KmlFactoryTestCase(unittest.TestCase):
     def test_trivial_kml_document(self):
         """Tests the creation of a trivial OGC KML document."""
         doc = K.kml()
-        self.assertTrue(schema_ogc.validate(doc))
+        schema = Schema("ogckml22.xsd")
+        self.assertTrue(schema.validate(doc))
         self.assertEquals(
             etree.tostring(doc),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
@@ -33,7 +32,7 @@ class KmlFactoryTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertTrue(schema_gx.validate(doc))
+        self.assertTrue(Schema("kml22gx.xsd").validate(doc))
         self.assertEquals(
             etree.tostring(doc),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
@@ -78,7 +77,7 @@ class KmlFactoryTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertTrue(schema_gx.validate(doc))
+        self.assertTrue(Schema("kml22gx.xsd").validate(doc))
         self.assertEquals(
             etree.tostring(doc),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
@@ -126,7 +125,7 @@ class KmlFactoryTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertTrue(schema_ogc.validate(doc))
+        self.assertTrue(Schema("kml22gx.xsd").validate(doc))
         self.assertEquals(
             etree.tostring(doc),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
