@@ -105,10 +105,14 @@ class ParseKmlGxTestCase(unittest.TestCase):
         )
     
     def test_parse_kml_file(self):
-        "Tests the parsing of a KML URL"
+        "Tests the parsing of a local KML file, with validation"
         file = 'test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
+        # parse with validation
         with open(file) as f:
             doc = parse(f, schema=Schema('kml22gx.xsd'))
+        # parse without validation
+        with open(file) as f:
+            doc = parse(f)
         self.assertTrue(True)
     
     def test_parse_kml_url_2(self):
