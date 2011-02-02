@@ -7,6 +7,20 @@ from pykml.factory import GX_ElementMaker as GX
 
 class KmlFactoryTestCase(unittest.TestCase):
     
+    def test_get_factory_object_name(self):
+        "Tests obtaining a factory object"
+        from pykml.factory import get_factory_object_name
+        
+        self.assertEqual(
+            get_factory_object_name('http://www.opengis.net/kml/2.2'),
+            'KML'
+        )
+        self.assertEqual(
+            get_factory_object_name('http://www.w3.org/2005/Atom'),
+            'ATOM'
+        )
+        self.assertEqual(get_factory_object_name(None), 'KML')
+    
     def test_trivial_kml_document(self):
         """Tests the creation of a trivial OGC KML document."""
         doc = K.kml()
@@ -145,6 +159,7 @@ class KmlFactoryTestCase(unittest.TestCase):
               '</Document>'
             '</kml>'
         )
+
 
 class GeneratePythonScriptTestCase(unittest.TestCase):
     

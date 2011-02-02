@@ -30,32 +30,24 @@ GX_ElementMaker = objectify.ElementMaker(
     nsmap={'gx': "http://www.google.com/kml/ext/2.2"},
 )
 
+def get_factory_object_name(namespace):
+    "Returns the correct factory object for a given namespace"
+    
+    factory_map = {
+        'http://www.opengis.net/kml/2.2': 'KML',
+        'http://www.w3.org/2005/Atom': 'ATOM',
+    }
+    if factory_map.has_key(namespace):
+        factory_object_name = factory_map[namespace]
+    else:
+        # use the KML factory object as the default, if no namespace is given
+        factory_object_name = 'KML'
+    return factory_object_name
+
 def write_python_script_for_kml_document(doc):
     "Generate a python script that will construct a given KML document"
     import StringIO
-    
-    def separate_namespace(qname):
-        "Separate the namespace from the element"
-        import re
-        try:
-            namespace, element_name = re.search('^{(.+)}(.+)$', qname).groups()
-        except:
-            namespace = None
-            element_name = qname
-        return namespace, element_name
-    
-    def get_factory_object(namespace):
-        "Returns the correct factory object for a given namespace"
-        
-        factory_map = {
-            'http://www.opengis.net/kml/2.2': 'KML',
-            'http://www.w3.org/2005/Atom': 'ATOM',
-        }
-        if factory_map.has_key(namespace):
-            factory_object = factory_map[namespace]
-        else:
-            factory_object = 'KML'
-        return factory_object
+    from pykml.helpers import separate_namespace
     
     output = StringIO.StringIO()
     indent_size = 2
@@ -85,7 +77,7 @@ def write_python_script_for_kml_document(doc):
                     text = ''
                 output.write('{indent}{factory}.{tag}({text}\n'.format(
                     indent = indent,
-                    factory = get_factory_object(namespace),
+                    factory = get_factory_object_name(namespace),
                     tag = element_name,
                     text = text,
                 ))
