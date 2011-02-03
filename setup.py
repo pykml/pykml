@@ -1,19 +1,18 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.0.2'
+version = '0.0.3'
 
 setup(
     name='pykml',
     version=version,
-    packages=[
-        'pykml',
-        'pykml.kml_ogc',
-        'pykml.kml_gx',
-    ],
+    packages=['pykml',],
     package_data={
-        'pykml.kml_ogc': ['schemas/*.xsd', 'test/*.py'],
-        'pykml.kml_gx': ['schemas/*.xsd', 'test/*.py'],
+        'pykml': [
+            'schemas/*.xsd',
+            'test/*.py',
+            'test/testfiles/google_kml_developers_guide/complete_tour_example.kml',
+        ],
     },
     install_requires=[
         'setuptools',
@@ -72,8 +71,8 @@ KML documents can be constructed by using element factory objects.  The
 following example uses two factory objects, corresponding to the OGC KML and
 ATOM namespaces:
 
-  >>> from pykml.kml_ogc.factory import KML_ElementMaker as K
-  >>> from pykml.kml_ogc.factory import ATOM_ElementMaker as ATOM
+  >>> from pykml.factory import KML_ElementMaker as K
+  >>> from pykml.factory import ATOM_ElementMaker as ATOM
   >>> doc = K.kml(
   ...         K.Document(
   ...           ATOM.author(
@@ -89,31 +88,32 @@ ATOM namespaces:
   ...         )
   ...       )
 
-Constructed documents can be converted to a string respresentation:
+Constructed documents can be converted to a string representation:
 
   >>> from lxml import etree
   >>> etree.tostring(doc)
 
 and can be validated against the official KML XML Schema: 
 
-  >>> from pykml.kml_ogc import schema
-  >>> print schema.validate(doc)
+  >>> from pykml.parser import Schema
+  >>> print Schema('ogckml22.xsd').validate(doc)
 
 Existing KML documents can also be parsed:
 
   >>> import urllib2
-  >>> from pykml.kml_ogc.parser import parse
+  >>> from pykml.parser import parse
   >>> url = 'http://code.google.com/apis/kml/documentation/KML_Samples.kml'
   >>> fileobject = urllib2.urlopen(url)
-  >>> tree = parse(fileobject, validate=True)
+  >>> doc = parse(fileobject, schema=Schema('ogckml22.xsd'))
 
 Documents that make use of the Google Extension namespace elements can be 
-created by importing the appropriate factory objects:
+created and validate using the Google Extensions schema:
 
-  >>> from pykml.kml_gx import schema
-  >>> from pykml.kml_gx.factory import KML_ElementMaker as K
-  >>> from pykml.kml_gx.factory import ATOM_ElementMaker as ATOM
-  >>> from pykml.kml_gx.factory import GX_ElementMaker as GX
+  >>> from pykml.factory import Schema
+  >>> from pykml.factory import KML_ElementMaker as K
+  >>> from pykml.factory import ATOM_ElementMaker as ATOM
+  >>> from pykml.factory import GX_ElementMaker as GX
+  >>> schema = Schema('kml22gx.xsd')
   >>> doc = K.kml(
   ...       GX.Tour(
   ...         GX.Playlist(

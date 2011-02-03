@@ -1,7 +1,6 @@
 include CREDITS.txt
 include LICENSE.txt
-include pykml/kml_ogc/schemas/*.xsd
-include pykml/kml_gx/schemas/*.xsd
-include pykml/kml_ogc/test/*.py
-include pykml/kml_gx/test/*.py
+include pykml/schemas/*.xsd
+include pykml/test/*.py
+recursive-include pykml/test/testfiles *
 recursive-include examples *.py
