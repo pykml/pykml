@@ -63,6 +63,10 @@ or
 
   $ sudo pip install pykml
 
+The installation can be tested by running the following:
+
+  $ nosetests -s --with-coverage
+
 ------
 Usage
 ------
@@ -93,7 +97,7 @@ Constructed documents can be converted to a string representation:
   >>> from lxml import etree
   >>> etree.tostring(doc)
 
-and can be validated against the official KML XML Schema: 
+And can be validated against the official KML XML Schema: 
 
   >>> from pykml.parser import Schema
   >>> print Schema('ogckml22.xsd').validate(doc)
