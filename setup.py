@@ -51,6 +51,12 @@ Dependencies
 ------------
 * lxml
 
+To verify that the lxml library has been installed correctly, open up a Python
+shell and type:
+
+>>> import lxml
+>>>
+
 ------------
 Installation
 ------------
@@ -75,75 +81,74 @@ KML documents can be constructed by using element factory objects.  The
 following example uses two factory objects, corresponding to the OGC KML and
 ATOM namespaces:
 
-  >>> from pykml.factory import KML_ElementMaker as K
-  >>> from pykml.factory import ATOM_ElementMaker as ATOM
-  >>> doc = K.kml(
-  ...         K.Document(
-  ...           ATOM.author(
-  ...             ATOM.name("J. K. Rowling")
-  ...           ),
-  ...           ATOM.link(href="http://www.harrypotter.com"),
-  ...           K.Placemark(
-  ...             K.name("Hogwarts"),
-  ...             K.Point(
-  ...               K.coordinates("1,1")
-  ...             )
-  ...           )
-  ...         )
-  ...       )
+>>> from pykml.factory import KML_ElementMaker as K
+>>> from pykml.factory import ATOM_ElementMaker as ATOM
+>>> doc = K.kml(
+...         K.Document(
+...           ATOM.author(
+...             ATOM.name("J. K. Rowling")
+...           ),
+...           ATOM.link(href="http://www.harrypotter.com"),
+...           K.Placemark(
+...             K.name("Hogwarts"),
+...             K.Point(
+...               K.coordinates("1,1")
+...             )
+...           )
+...         )
+...       )
 
 Constructed documents can be converted to a string representation:
 
-  >>> from lxml import etree
-  >>> etree.tostring(doc)
+>>> from lxml import etree
+>>> etree.tostring(doc)
 
 And can be validated against the official KML XML Schema: 
 
-  >>> from pykml.parser import Schema
-  >>> print Schema('ogckml22.xsd').validate(doc)
+>>> from pykml.parser import Schema
+>>> print Schema('ogckml22.xsd').validate(doc)
 
 Existing KML documents can also be parsed:
 
-  >>> import urllib2
-  >>> from pykml.parser import parse
-  >>> url = 'http://code.google.com/apis/kml/documentation/KML_Samples.kml'
-  >>> fileobject = urllib2.urlopen(url)
-  >>> doc = parse(fileobject, schema=Schema('ogckml22.xsd'))
+>>> import urllib2
+>>> from pykml.parser import parse
+>>> url = 'http://code.google.com/apis/kml/documentation/KML_Samples.kml'
+>>> fileobject = urllib2.urlopen(url)
+>>> doc = parse(fileobject, schema=Schema('ogckml22.xsd'))
 
 Documents that make use of the Google Extension namespace elements can be 
 created and validate using the Google Extensions schema:
 
-  >>> from pykml.factory import Schema
-  >>> from pykml.factory import KML_ElementMaker as K
-  >>> from pykml.factory import ATOM_ElementMaker as ATOM
-  >>> from pykml.factory import GX_ElementMaker as GX
-  >>> schema = Schema('kml22gx.xsd')
-  >>> doc = K.kml(
-  ...       GX.Tour(
-  ...         GX.Playlist(
-  ...           GX.SoundCue(
-  ...             K.href("http://dev.keyhole.com/codesite/cntowerfacts.mp3")
-  ...           ),
-  ...           GX.Wait(
-  ...             GX.duration(10)
-  ...           ),
-  ...           GX.FlyTo(
-  ...             GX.duration(5),
-  ...             GX.flyToMode("bounce"),
-  ...             K.LookAt(
-  ...               K.longitude(-79.387),
-  ...               K.latitude(43.643),
-  ...               K.altitude(0),
-  ...               K.heading(-172.3),
-  ...               K.tilt(10),
-  ...               K.range(1200),
-  ...               K.altitudeMode("relativeToGround"),
-  ...             )
-  ...           )
-  ...         )
-  ...       )
-  ... )
-  >>> print schema.validate(doc)
-  
+>>> from pykml.factory import Schema
+>>> from pykml.factory import KML_ElementMaker as K
+>>> from pykml.factory import ATOM_ElementMaker as ATOM
+>>> from pykml.factory import GX_ElementMaker as GX
+>>> schema = Schema('kml22gx.xsd')
+>>> doc = K.kml(
+...       GX.Tour(
+...         GX.Playlist(
+...           GX.SoundCue(
+...             K.href("http://dev.keyhole.com/codesite/cntowerfacts.mp3")
+...           ),
+...           GX.Wait(
+...             GX.duration(10)
+...           ),
+...           GX.FlyTo(
+...             GX.duration(5),
+...             GX.flyToMode("bounce"),
+...             K.LookAt(
+...               K.longitude(-79.387),
+...               K.latitude(43.643),
+...               K.altitude(0),
+...               K.heading(-172.3),
+...               K.tilt(10),
+...               K.range(1200),
+...               K.altitudeMode("relativeToGround"),
+...             )
+...           )
+...         )
+...       )
+... )
+>>> print schema.validate(doc)
 """,
 )
