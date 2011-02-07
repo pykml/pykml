@@ -53,9 +53,9 @@ def write_python_script_for_kml_document(doc):
     indent_size = 2
     
     # add the namespace declaration section
-    output.write('from pykml.kml_gx.factory import KML_ElementMaker as KML\n')
-    output.write('from pykml.kml_gx.factory import ATOM_ElementMaker as ATOM\n')
-    output.write('from pykml.kml_gx.factory import GX_ElementMaker as GX\n')
+    output.write('from pykml.factory import KML_ElementMaker as KML\n')
+    output.write('from pykml.factory import ATOM_ElementMaker as ATOM\n')
+    output.write('from pykml.factory import GX_ElementMaker as GX\n')
     output.write('\n')
     
     level = 0
@@ -72,7 +72,11 @@ def write_python_script_for_kml_document(doc):
                     indent = ' ' * level * indent_size
                 level += 1
                 if elem.text:
-                    text = '"{0}"'.format(elem.text)
+                    if element_name=='description':
+                        import ipdb; ipdb.set_trace()
+                        text = '"<![CDATA[{0}]]>"'.format(elem.text)
+                    else:
+                        text = '"{0}"'.format(elem.text)
                 else:
                     text = ''
                 output.write('{indent}{factory}.{tag}({text}\n'.format(
@@ -95,7 +99,7 @@ def write_python_script_for_kml_document(doc):
     # remove the last comma
     output.pos -= 2
     output.truncate()
-    output.write('\n\n')
+    output.write('\n')
     # add python code to print out the KML document
     output.write('from lxml import etree\n')
     output.write('print etree.tostring(doc,pretty_print=True)\n')
