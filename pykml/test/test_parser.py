@@ -115,6 +115,34 @@ class ParseKmlGxTestCase(unittest.TestCase):
             doc = parse(f)
         self.assertTrue(True)
     
+    def test_parse_kml_file_with_cdata(self):
+        "Tests the parsing of a local KML file, with a CDATA description string"
+        file = 'test/testfiles/google_kml_tutorial/using_the_cdata_element.kml'
+        # parse with validation
+        with open(file) as f:
+            doc = parse(f, schema=Schema('kml22gx.xsd'))
+        self.assertEquals(
+            etree.tostring(doc),
+            '<kml xmlns="http://www.opengis.net/kml/2.2">'
+              '<Document>'
+                '<Placemark>'
+                  '<name>CDATA example</name>'
+                  '<description>'
+                    '<![CDATA[\n'
+                    '          <h1>CDATA Tags are useful!</h1>\n'
+                    '          <p><font color="red">Text is <i>more readable</i> and \n'
+                    '          <b>easier to write</b> when you can avoid using entity \n'
+                    '          references.</font></p>\n'
+                    '        ]]>'
+                  '</description>'
+                '<Point>'
+                  '<coordinates>102.595626,14.996729</coordinates>'
+                '</Point>'
+              '</Placemark>'
+            '</Document>'
+          '</kml>'
+        )
+    
     def test_parse_kml_url_2(self):
         "Tests the parsing of a KML URL"
         url = 'http://code.google.com/apis/kml/documentation/kmlfiles/animatedupdate_example.kml'

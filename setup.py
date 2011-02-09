@@ -11,7 +11,8 @@ setup(
         'pykml': [
             'schemas/*.xsd',
             'test/*.py',
-            'test/testfiles/google_kml_developers_guide/complete_tour_example.kml',
+            'test/testfiles/google_kml_developers_guide/*.kml',
+            'test/testfiles/google_kml_tutorial/*.kml',
         ],
     },
     install_requires=[
@@ -49,7 +50,9 @@ provides Pythonic access to XML documents.
 ------------
 Dependencies
 ------------
-* lxml
+* lxml (`instructions for installing lxml`_)
+
+..  _`instructions for installing lxml`: http://codespeak.net/lxml/installation.html
 
 To verify that the lxml library has been installed correctly, open up a Python
 shell and type:
@@ -93,7 +96,7 @@ ATOM namespaces:
 ...             K.name("Hogwarts"),
 ...             K.Point(
 ...               K.coordinates("1,1")
-...             )
+...             )python setup.py sdist
 ...           )
 ...         )
 ...       )

@@ -71,12 +71,25 @@ def write_python_script_for_kml_document(doc):
                 else:
                     indent = ' ' * level * indent_size
                 level += 1
+                
                 if elem.text:
-                    if element_name=='description':
-                        import ipdb; ipdb.set_trace()
-                        text = '"<![CDATA[{0}]]>"'.format(elem.text)
-                    else:
-                        text = '"{0}"'.format(elem.text)
+                    # METHOD 1
+#                    # treat all text string the same. this works but gets
+#                    # messy for multi-line test strings
+#                    text = repr(elem.text)
+                    # METHOD 2 - format multiline strings differently
+                    text_list = elem.text.split('\n')
+                    if len(text_list) == 1:
+                        text = repr(elem.text)
+                    else: # len(text_list) > 1
+                        # format and join all non-empty lines
+                        text = '\n' + ''.join(
+                                ['{indent}{content}\n'.format(
+                                        indent=' '*(len(t)-len(t.lstrip())),
+                                        content=repr(t.lstrip())
+                                    ) for t in text_list if len(t.strip())>0
+                                ]
+                            ) + indent
                 else:
                     text = ''
                 output.write('{indent}{factory}.{tag}({text}\n'.format(

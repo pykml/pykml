@@ -33,7 +33,7 @@ class KmlFactoryTestCase(unittest.TestCase):
                  'xmlns="http://www.opengis.net/kml/2.2"/>'
         )
     
-    def test_basic_kml_document(self):
+    def test_basic_kml_document_2(self):
         """Tests the creation of a basic OGC KML document."""
         doc = KML.kml(
             KML.Document(
@@ -128,7 +128,7 @@ class KmlFactoryTestCase(unittest.TestCase):
         doc = KML.kml(
             KML.Document(
                 ATOM.author(
-                    ATOM.name("J. KML. Rowling")
+                    ATOM.name("J. K. Rowling")
                 ),
                 ATOM.link(href="http://www.harrypotter.com"),
                 KML.Placemark(
@@ -147,13 +147,78 @@ class KmlFactoryTestCase(unittest.TestCase):
                  'xmlns="http://www.opengis.net/kml/2.2">'
               '<Document>'
                 '<atom:author>'
-                  '<atom:name>J. KML. Rowling</atom:name>'
+                  '<atom:name>J. K. Rowling</atom:name>'
                 '</atom:author>'
                 '<atom:link href="http://www.harrypotter.com"/>'
                 '<Placemark>'
                   '<name>Hogwarts</name>'
                   '<Point>'
                     '<coordinates>1,1</coordinates>'
+                  '</Point>'
+                '</Placemark>'
+              '</Document>'
+            '</kml>'
+        )
+
+    def test_kml_document_with_cdata_description(self):
+        """Tests the creation of a KML document with a CDATA element."""
+        from pykml.factory import KML_ElementMaker as KML
+        from lxml import etree
+        
+        doc = KML.description(
+                '<h1>CDATA Tags are useful!</h1>'
+            )
+        #print etree.tostring(doc,pretty_print=True)
+        self.assertEquals(
+            etree.tostring(doc),
+              '<description '
+                    'xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                    'xmlns:atom="http://www.w3.org/2005/Atom" '
+                    'xmlns="http://www.opengis.net/kml/2.2">'
+                  '&lt;h1&gt;CDATA Tags are useful!&lt;/h1&gt;'
+              '</description>'
+        )
+
+    def test_kml_document_with_cdata_description_2(self):
+        """Tests the creation of a KML document with a CDATA element."""
+        
+        from pykml.factory import KML_ElementMaker as KML
+        from pykml.factory import ATOM_ElementMaker as ATOM
+        from pykml.factory import GX_ElementMaker as GX
+        from lxml import etree
+        doc = KML.kml(
+          KML.Document(
+            KML.Placemark(
+              KML.name("CDATA example"),
+              KML.description(
+                  '<h1>CDATA Tags are useful!</h1>'
+                  '<p><font color="red">Text is <i>more readable</i> and '
+                  '<b>easier to write</b> when you can avoid using entity '
+                  'references.</font></p>'
+              ),
+              KML.Point(
+                KML.coordinates("102.595626,14.996729"),
+              ),
+            ),
+          ),
+        )
+        #print etree.tostring(doc,pretty_print=True)
+        self.assertEquals(
+            etree.tostring(doc),
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                 'xmlns:atom="http://www.w3.org/2005/Atom" '
+                 'xmlns="http://www.opengis.net/kml/2.2">'
+              '<Document>'
+                '<Placemark>'
+                  '<name>CDATA example</name>'
+                  '<description>'
+                    '&lt;h1&gt;CDATA Tags are useful!&lt;/h1&gt;'
+                    '&lt;p&gt;&lt;font color="red"&gt;Text is &lt;i&gt;more readable&lt;/i&gt; and '
+                    '&lt;b&gt;easier to write&lt;/b&gt; when you can avoid using entity '
+                    'references.&lt;/font&gt;&lt;/p&gt;'
+                  '</description>'
+                  '<Point>'
+                    '<coordinates>102.595626,14.996729</coordinates>'
                   '</Point>'
                 '</Placemark>'
               '</Document>'
@@ -191,13 +256,13 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             'doc = KML.kml(\n'
             '  KML.Document(\n'
             '    ATOM.author(\n'
-            '      ATOM.name("J. K. Rowling"),\n'
+            '      ATOM.name(\'J. K. Rowling\'),\n'
             '    ),\n'
             '    ATOM.link(href="http://www.harrypotter.com",),\n'
             '    KML.Placemark(\n'
-            '      KML.name("Hogwarts"),\n'
+            '      KML.name(\'Hogwarts\'),\n'
             '      KML.Point(\n'
-            '        KML.coordinates("1,1"),\n'
+            '        KML.coordinates(\'1,1\'),\n'
             '      ),\n'
             '    ),\n'
             '  ),\n'
@@ -206,71 +271,15 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             'print etree.tostring(doc,pretty_print=True)\n'
         )
 
-#    def test_write_python_script_for_kml_document_with_cdata(self):
-#        """Tests the creation of an OGC KML document with a cdata tag"""
-#        
-#        from pykml.factory import write_python_script_for_kml_document
-#        
-#        doc = KML.kml(
-#            KML.Document(
-#                KML.Placemark(
-#                    KML.name("CDATA example"),
-#                    KML.description(
-#                        '<h1>CDATA Tags are useful!</h1>'
-#                        '<p><font color="red">Text is <i>more readable</i> and '
-#                        '<b>easier to write</b> when you can avoid using entity '
-#                        'references.</font></p>'
-#                    ),
-#                ),
-#                KML.Point(
-#                    KML.coordinates("102.595626,14.996729"),
-#                )
-#            )
-#        )
-#        script = write_python_script_for_kml_document(doc)
-#        self.assertEquals(script,
-#"""from pykml.factory import KML_ElementMaker as KML
-#from pykml.factory import ATOM_ElementMaker as ATOM
-#from pykml.factory import GX_ElementMaker as GX
-#
-#doc = KML.kml(
-#  KML.Document(
-#    KML.Placemark(
-#      KML.name("CDATA example"),
-#      KML.description("<h1>CDATA Tags are useful!</h1><p><font color="red">Text is <i>more readable</i> and <b>easier to write</b> when you can avoid using entity references.</font></p>"),
-#    ),
-#    KML.Point(
-#      KML.coordinates("102.595626,14.996729"),
-#    ),
-#  ),
-#)
-#from lxml import etree
-#print etree.tostring(doc,pretty_print=True)
-#"""
-#)
-
-
-    def test_write_python_script_for_kml_document_with_cdata2(self):
+    def test_write_python_script_for_kml_document_with_cdata(self):
         """Tests the creation of an OGC KML document with a cdata tag"""
         
+        from pykml.parser import parse
         from pykml.factory import write_python_script_for_kml_document
         
-        doc = KML.kml(
-            KML.Document(
-                KML.Placemark(
-                    KML.name("CDATA example"),
-                    KML.description(
-                        '<h1>CDATA Tags are useful!</h1>'
-                        '<p><font color="red">Text is <i>more readable</i> and '
-                        '<b>easier to write</b> when you can avoid using entity '
-                        'references.</font></p>'
-                    ),
-                ),
-                KML.Point(
-                    KML.coordinates("102.595626,14.996729"),
-                )
-            )
-        )
+        file = 'test/testfiles/google_kml_tutorial/using_the_cdata_element.kml'
+        with open(file) as f:
+            doc = parse(f, schema=Schema('kml22gx.xsd'))
         script = write_python_script_for_kml_document(doc)
         self.assertEquals(
             script,
@@ -281,24 +290,33 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             'doc = KML.kml(\n'
             '  KML.Document(\n'
             '    KML.Placemark(\n'
-            '      KML.name("CDATA example"),\n'
-            '      KML.description("<![CDATA['
-                     '<h1>CDATA Tags are useful!</h1>'
-                     '<p><font color="red">Text is <i>more readable</i> and '
-                     '<b>easier to write</b> when you can avoid using entity '
-                     'references.</font></p>'
-                     ']]>"),\n'
-            '    ),\n'
-            '    KML.Point(\n'
-            '      KML.coordinates("102.595626,14.996729"),\n'
+            '      KML.name(\'CDATA example\'),\n'
+            '      KML.description(\n'
+            '          \'<h1>CDATA Tags are useful!</h1>\'\n'
+            '          \'<p><font color="red">Text is <i>more readable</i> and \'\n'
+            '          \'<b>easier to write</b> when you can avoid using entity \'\n'
+            '          \'references.</font></p>\'\n'
+            '      ),\n'
+            '      KML.Point(\n'
+            '        KML.coordinates(\'102.595626,14.996729\'),\n'
+            '      ),\n'
             '    ),\n'
             '  ),\n'
             ')\n'
             'from lxml import etree\n'
             'print etree.tostring(doc,pretty_print=True)\n'
         )
-        print script
-
+        # create a temporary python file
+        import tempfile
+        handle, tfile = tempfile.mkstemp(suffix='.py')
+        print tfile
+        with open(tfile, 'w') as f:
+            f.write(script)
+        # make a system call to execute the temporary python file
+        import os
+        #import ipdb; ipdb.set_trace()
+        exit_code = os.system('python {file}'.format(file=tfile))
+        self.assertEqual(exit_code, 0)
 
 if __name__ == '__main__':
     unittest.main()
