@@ -36,9 +36,14 @@ def get_factory_object_name(namespace):
     factory_map = {
         'http://www.opengis.net/kml/2.2': 'KML',
         'http://www.w3.org/2005/Atom': 'ATOM',
+        'http://www.google.com/kml/ext/2.2': 'GX'
     }
-    if factory_map.has_key(namespace):
-        factory_object_name = factory_map[namespace]
+    if namespace:
+        if factory_map.has_key(namespace):
+            factory_object_name = factory_map[namespace]
+        else:
+            #import ipdb; ipdb.set_trace()
+            factory_object_name = None
     else:
         # use the KML factory object as the default, if no namespace is given
         factory_object_name = 'KML'
@@ -52,6 +57,9 @@ def write_python_script_for_kml_document(doc):
     output = StringIO.StringIO()
     indent_size = 2
     
+    # add the etree package so that comments can be handled
+    output.write('from lxml import etree\n')
+    
     # add the namespace declaration section
     output.write('from pykml.factory import KML_ElementMaker as KML\n')
     output.write('from pykml.factory import ATOM_ElementMaker as ATOM\n')
@@ -59,19 +67,46 @@ def write_python_script_for_kml_document(doc):
     output.write('\n')
     
     level = 0
-    context = etree.iterwalk(doc, events=("start", "end"))
+    #context = etree.iterwalk(doc, events=("start", "end", "comment"))
+    xml = StringIO.StringIO(etree.tostring(doc))
+    context = etree.iterparse(xml, events=("start", "end", "comment"))
     output.write('doc = ')
     last_action = None
     for action, elem in context:
-        if action in ('start','end'):
+        if action in ('start','end','comment'):
             namespace, element_name = separate_namespace(elem.tag)
-            if action in ('start'):
+            
+            # debug comment issue
+            if action in ('comment'):
+                #import ipdb; ipdb.set_trace()
+                indent = ' ' * level * indent_size
+                if elem.text:
+                    text_list = elem.text.split('\n')
+                    if len(text_list) == 1:
+                        text = repr(elem.text)
+                    else: # len(text_list) > 1
+                        # format and join all non-empty lines
+                        text = '\n' + ''.join(
+                                ['{indent}{content}\n'.format(
+                                        indent=' '*(len(t)-len(t.lstrip())),
+                                        content=repr(t.lstrip())
+                                    ) for t in text_list if len(t.strip())>0
+                                ]
+                            ) + indent
+                else:
+                    text = ''
+                
+                output.write("{indent}etree.Comment({comment}),\n".format(
+                    indent = indent,
+                    comment = text,
+                ))
+                pass
+            elif action in ('start'):
                 if last_action == None:
                     indent = ''
                 else:
                     indent = ' ' * level * indent_size
                 level += 1
-                
                 if elem.text:
                     # METHOD 1
 #                    # treat all text string the same. this works but gets
@@ -106,7 +141,8 @@ def write_python_script_for_kml_document(doc):
                 else:
                     indent = ' ' * level * indent_size
                 for att,val in elem.items():
-                    output.write('{0}{1}="{2}",'.format(indent,att,val))
+                    #import ipdb; ipdb.set_trace()
+                    output.write('{0}  {1}="{2}",\n'.format(indent,att,val))
                 output.write('{0}),\n'.format(indent))
         last_action = action
     # remove the last comma
