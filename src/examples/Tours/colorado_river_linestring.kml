@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>colorado_river_linestring.kml</name>
+	<StyleMap id="msn_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#sn_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#sh_ylw-pushpin</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sh_ylw-pushpin">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="sn_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Placemark>
+		<name>Grand Canyon river trace</name>
+		<styleUrl>#msn_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-111.8711209488887,36.42420398630208,0 -111.8695678071731,36.41941899009527,0 -111.86784416085,36.41537148209557,0 -111.8683724995157,36.41176256673599,0 -111.8746798879202,36.40728018191343,0 -111.8795665693234,36.40371729596561,0 -111.8826470055379,36.40036669036972,0 -111.8817253416341,36.39565786776969,0 -111.8774754798773,36.39317812691633,0 -111.87230691449,36.39273376505885,0 -111.8660484422936,36.39459603965923,0 -111.8577751565096,36.39741204603253,0 -111.8507238890541,36.39681027220053,0 -111.8481893288035,36.39418589258934,0 -111.8466273007541,36.39094724846698,0 -111.8521825837062,36.38501022764137,0 -111.8592768578009,36.38449213785417,0 -111.8720792923011,36.38108472235916,0 -111.8862597612117,36.37747795044136,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>
