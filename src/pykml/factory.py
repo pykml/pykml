@@ -73,34 +73,34 @@ def write_python_script_for_kml_document(doc):
     output.write('doc = ')
     last_action = None
     for action, elem in context:
+        # TODO: remove the following redundant conditional
         if action in ('start','end','comment'):
             namespace, element_name = separate_namespace(elem.tag)
             
-            # debug comment issue
             if action in ('comment'):
                 #import ipdb; ipdb.set_trace()
-                indent = ' ' * level * indent_size
-                if elem.text:
-                    text_list = elem.text.split('\n')
-                    if len(text_list) == 1:
-                        text = repr(elem.text)
-                    else: # len(text_list) > 1
-                        # format and join all non-empty lines
-                        text = '\n' + ''.join(
-                                ['{indent}{content}\n'.format(
-                                        indent=' '*(len(t)-len(t.lstrip())),
-                                        content=repr(t.lstrip())
-                                    ) for t in text_list if len(t.strip())>0
-                                ]
-                            ) + indent
-                else:
-                    text = ''
-                
-                output.write("{indent}etree.Comment({comment}),\n".format(
-                    indent = indent,
-                    comment = text,
-                ))
-                pass
+                # the following statement avoids trying to set a top-level comment
+                if last_action != None:
+                    indent = ' ' * level * indent_size
+                    if elem.text:
+                        text_list = elem.text.split('\n')
+                        if len(text_list) == 1:
+                            text = repr(elem.text)
+                        else: # len(text_list) > 1
+                            # format and join all non-empty lines
+                            text = '\n' + ''.join(
+                                    ['{indent}{content}\n'.format(
+                                            indent=' '*(len(t)-len(t.lstrip())),
+                                            content=repr(t.lstrip())
+                                        ) for t in text_list if len(t.strip())>0
+                                    ]
+                                ) + indent
+                    else:
+                        text = ''
+                    output.write("{indent}etree.Comment({comment}),\n".format(
+                        indent = indent,
+                        comment = text,
+                    ))
             elif action in ('start'):
                 if last_action == None:
                     indent = ''

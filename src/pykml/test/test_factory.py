@@ -249,6 +249,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         script = write_python_script_for_kml_document(doc)
         self.assertEquals(
             script,
+            'from lxml import etree\n'
             'from pykml.factory import KML_ElementMaker as KML\n'
             'from pykml.factory import ATOM_ElementMaker as ATOM\n'
             'from pykml.factory import GX_ElementMaker as GX\n'
@@ -258,7 +259,8 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             '    ATOM.author(\n'
             '      ATOM.name(\'J. K. Rowling\'),\n'
             '    ),\n'
-            '    ATOM.link(href="http://www.harrypotter.com",),\n'
+            '    ATOM.link(  href="http://www.harrypotter.com",\n'
+            '),\n'
             '    KML.Placemark(\n'
             '      KML.name(\'Hogwarts\'),\n'
             '      KML.Point(\n'
@@ -285,6 +287,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         script = write_python_script_for_kml_document(doc)
         self.assertEquals(
             script,
+            'from lxml import etree\n'
             'from pykml.factory import KML_ElementMaker as KML\n'
             'from pykml.factory import ATOM_ElementMaker as ATOM\n'
             'from pykml.factory import GX_ElementMaker as GX\n'
@@ -397,15 +400,9 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         # test that the root element is as expected
         self.assertEqual(doc2.docinfo.root_name, 'kml')
         
-        # test that the original parsed, and python generated documents are 
-        # equivalent
         self.assertEqual(etree.tostring(doc), etree.tostring(doc2))
-#        self.assertEqual(
-#            etree.tostring(etree.ElementTree(doc)),
-#            etree.tostring(etree.ElementTree(doc2))
-#        )
         
-        import ipdb; ipdb.set_trace()
+        #import ipdb; ipdb.set_trace()
         pass
 
 if __name__ == '__main__':
