@@ -1,4 +1,5 @@
 import unittest
+from os import path
 from lxml import etree
 from pykml.parser import Schema
 from pykml.factory import KML_ElementMaker as KML
@@ -280,9 +281,14 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         from pykml.parser import parse
         from pykml.factory import write_python_script_for_kml_document
         
-        file = 'test/testfiles/google_kml_tutorial/using_the_cdata_element.kml'
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_tutorial/using_the_cdata_element.kml'
+        )
+        file = 'test/testfiles/'
         schema = Schema('kml22gx.xsd')
-        with open(file) as f:
+        with open(test_datafile) as f:
             doc = parse(f, schema=schema)
         script = write_python_script_for_kml_document(doc)
         self.assertEquals(
@@ -339,9 +345,13 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         from pykml.parser import parse
         from pykml.factory import write_python_script_for_kml_document
         
-        file = 'test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_developers_guide/complete_tour_example.kml'
+        )
         schema = Schema('kml22gx.xsd')
-        with open(file) as f:
+        with open(test_datafile) as f:
             doc = parse(f, schema=schema)
         script = write_python_script_for_kml_document(doc)
         
@@ -373,9 +383,13 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         from pykml.parser import parse
         from pykml.factory import write_python_script_for_kml_document
         
-        file = 'test/testfiles/simple_file_with_comments.kml'
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'simple_file_with_comments.kml'
+        )
         schema = Schema('kml22gx.xsd')
-        with open(file) as f:
+        with open(test_datafile) as f:
             doc = parse(f, schema=schema)
         script = write_python_script_for_kml_document(doc)
         

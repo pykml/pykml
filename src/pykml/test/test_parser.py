@@ -1,4 +1,5 @@
 import unittest
+from os import path
 import urllib2
 from StringIO import StringIO
 from lxml import etree
@@ -106,20 +107,28 @@ class ParseKmlGxTestCase(unittest.TestCase):
     
     def test_parse_kml_file(self):
         "Tests the parsing of a local KML file, with validation"
-        file = 'test/testfiles/google_kml_developers_guide/complete_tour_example.kml'
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_developers_guide/complete_tour_example.kml'
+        )
         # parse with validation
-        with open(file) as f:
+        with open(test_datafile) as f:
             doc = parse(f, schema=Schema('kml22gx.xsd'))
         # parse without validation
-        with open(file) as f:
+        with open(test_datafile) as f:
             doc = parse(f)
         self.assertTrue(True)
     
     def test_parse_kml_file_with_cdata(self):
         "Tests the parsing of a local KML file, with a CDATA description string"
-        file = 'test/testfiles/google_kml_tutorial/using_the_cdata_element.kml'
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_tutorial/using_the_cdata_element.kml'
+        )
         # parse with validation
-        with open(file) as f:
+        with open(test_datafile) as f:
             doc = parse(f, schema=Schema('kml22gx.xsd'))
         self.assertEquals(
             etree.tostring(doc),

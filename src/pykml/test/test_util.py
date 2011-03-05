@@ -1,7 +1,7 @@
 import unittest
+from os import path
 from pykml.parser import Schema
 from pykml.parser import parse
-
 
 class KmlUtilTestCase(unittest.TestCase):
     
@@ -9,7 +9,12 @@ class KmlUtilTestCase(unittest.TestCase):
         """Tests the counting of elements in a KML document."""
         from pykml.util import count_elements
         
-        with open('test/testfiles/google_kml_developers_guide/complete_tour_example.kml') as f:
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_developers_guide/complete_tour_example.kml'
+        )
+        with open(test_datafile) as f:
             doc = parse(f, schema=Schema('kml22gx.xsd'))
         summary = count_elements(doc)
         
