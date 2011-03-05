@@ -98,7 +98,7 @@ ATOM namespaces:
 ...             K.name("Hogwarts"),
 ...             K.Point(
 ...               K.coordinates("1,1")
-...             )python setup.py sdist
+...             )
 ...           )
 ...         )
 ...       )
