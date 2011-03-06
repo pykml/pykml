@@ -169,7 +169,6 @@ class KmlFactoryTestCase(unittest.TestCase):
         doc = KML.description(
                 '<h1>CDATA Tags are useful!</h1>'
             )
-        #print etree.tostring(doc,pretty_print=True)
         self.assertEquals(
             etree.tostring(doc),
               '<description '
@@ -203,7 +202,6 @@ class KmlFactoryTestCase(unittest.TestCase):
             ),
           ),
         )
-        #print etree.tostring(doc,pretty_print=True)
         self.assertEquals(
             etree.tostring(doc),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
@@ -355,7 +353,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')
-        print tfile
+        #print tfile
         with open(tfile, 'w') as f:
             f.write(script)
         
@@ -364,7 +362,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         current_env = os.environ.copy()
         current_env["PYTHONPATH"] = os.path.abspath(os.path.join(os.getcwd(),'..'))
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
-        print temp_kml_file
+        #print temp_kml_file
         with open(temp_kml_file, 'w') as f:
             exit_code = subprocess.call(["python",tfile], stdout=f, env=current_env)
         self.assertEqual(exit_code, 0)
@@ -393,7 +391,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')
-        print tfile
+        #print tfile  # Useful for debugging
         with open(tfile, 'w') as f:
             f.write(script)
         
@@ -402,7 +400,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         current_env = os.environ.copy()
         current_env["PYTHONPATH"] = os.path.abspath(os.path.join(os.getcwd(),'..'))
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
-        print temp_kml_file
+        #print temp_kml_file  # Useful for debugging
         with open(temp_kml_file, 'w') as f:
             exit_code = subprocess.call(["python",tfile], stdout=f, env=current_env)
         self.assertEqual(exit_code, 0)

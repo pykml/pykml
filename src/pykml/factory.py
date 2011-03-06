@@ -70,6 +70,7 @@ def write_python_script_for_kml_document(doc):
     context = etree.iterparse(xml, events=("start", "end", "comment"))
     output.write('doc = ')
     last_action = None
+    main_element_processed_flag = False
     previous_list = []  # list of comments before the root element
     posterior_list = []  # list of comments after the root element
     for action, elem in context:
@@ -94,16 +95,24 @@ def write_python_script_for_kml_document(doc):
                 else:
                     text = ''
                 if level == 0:
-                    previous_list.append("{indent}etree.Comment({comment})".format(
-                        indent = indent,
-                        comment = text,
-                    ))
+                    # store the comment so that it can be appended later
+                    if main_element_processed_flag:
+                        posterior_list.append("{indent}etree.Comment({comment})".format(
+                            indent = indent,
+                            comment = text,
+                        ))
+                    else:
+                        previous_list.append("{indent}etree.Comment({comment})".format(
+                            indent = indent,
+                            comment = text,
+                        ))
                 else:
                     output.write("{indent}etree.Comment({comment}),\n".format(
                         indent = indent,
                         comment = text,
                     ))
             elif action in ('start'):
+                main_element_processed_flag = True
                 if last_action == None:
                     indent = ''
                 else:
@@ -154,6 +163,10 @@ def write_python_script_for_kml_document(doc):
     
     for entry in previous_list:
         output.write('doc.addprevious({entry})\n'.format(
+            entry=entry
+        ))
+    for entry in posterior_list:
+        output.write('doc.addnext({entry})\n'.format(
             entry=entry
         ))
     
