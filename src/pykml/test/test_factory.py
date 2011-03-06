@@ -270,8 +270,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             '    ),\n'
             '  ),\n'
             ')\n'
-            'from lxml import etree\n'
-            'print etree.tostring(doc,pretty_print=True)\n'
+            'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
         )
 
     def test_write_python_script_for_kml_document_with_cdata(self):
@@ -314,8 +313,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             '    ),\n'
             '  ),\n'
             ')\n'
-            'from lxml import etree\n'
-            'print etree.tostring(doc,pretty_print=True)\n'
+            'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
         )
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')

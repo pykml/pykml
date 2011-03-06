@@ -42,7 +42,6 @@ def get_factory_object_name(namespace):
         if factory_map.has_key(namespace):
             factory_object_name = factory_map[namespace]
         else:
-            #import ipdb; ipdb.set_trace()
             factory_object_name = None
     else:
         # use the KML factory object as the default, if no namespace is given
@@ -67,36 +66,39 @@ def write_python_script_for_kml_document(doc):
     output.write('\n')
     
     level = 0
-    #context = etree.iterwalk(doc, events=("start", "end", "comment"))
     xml = StringIO.StringIO(etree.tostring(doc))
     context = etree.iterparse(xml, events=("start", "end", "comment"))
     output.write('doc = ')
     last_action = None
+    previous_list = []  # list of comments before the root element
+    posterior_list = []  # list of comments after the root element
     for action, elem in context:
         # TODO: remove the following redundant conditional
         if action in ('start','end','comment'):
             namespace, element_name = separate_namespace(elem.tag)
-            
             if action in ('comment'):
-                #import ipdb; ipdb.set_trace()
-                # the following statement avoids trying to set a top-level comment
-                if last_action != None:
-                    indent = ' ' * level * indent_size
-                    if elem.text:
-                        text_list = elem.text.split('\n')
-                        if len(text_list) == 1:
-                            text = repr(elem.text)
-                        else: # len(text_list) > 1
-                            # format and join all non-empty lines
-                            text = '\n' + ''.join(
-                                    ['{indent}{content}\n'.format(
-                                            indent=' '*(len(t)-len(t.lstrip())),
-                                            content=repr(t.lstrip())
-                                        ) for t in text_list if len(t.strip())>0
-                                    ]
-                                ) + indent
-                    else:
-                        text = ''
+                indent = ' ' * level * indent_size
+                if elem.text:
+                    text_list = elem.text.split('\n')
+                    if len(text_list) == 1:
+                        text = repr(elem.text)
+                    else: # len(text_list) > 1
+                        # format and join all non-empty lines
+                        text = '\n' + ''.join(
+                                ['{indent}{content}\n'.format(
+                                        indent=' '*(len(t)-len(t.lstrip())),
+                                        content=repr(t.lstrip())
+                                    ) for t in text_list if len(t.strip())>0
+                                ]
+                            ) + indent
+                else:
+                    text = ''
+                if level == 0:
+                    previous_list.append("{indent}etree.Comment({comment})".format(
+                        indent = indent,
+                        comment = text,
+                    ))
+                else:
                     output.write("{indent}etree.Comment({comment}),\n".format(
                         indent = indent,
                         comment = text,
@@ -141,16 +143,21 @@ def write_python_script_for_kml_document(doc):
                 else:
                     indent = ' ' * level * indent_size
                 for att,val in elem.items():
-                    #import ipdb; ipdb.set_trace()
                     output.write('{0}  {1}="{2}",\n'.format(indent,att,val))
                 output.write('{0}),\n'.format(indent))
         last_action = action
+    
     # remove the last comma
     output.pos -= 2
     output.truncate()
     output.write('\n')
+    
+    for entry in previous_list:
+        output.write('doc.addprevious({entry})\n'.format(
+            entry=entry
+        ))
+    
     # add python code to print out the KML document
-    output.write('from lxml import etree\n')
-    output.write('print etree.tostring(doc,pretty_print=True)\n')
+    output.write('print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n')
     
     return output.getvalue()
