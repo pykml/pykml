@@ -178,7 +178,7 @@ class KmlFactoryTestCase(unittest.TestCase):
                   '&lt;h1&gt;CDATA Tags are useful!&lt;/h1&gt;'
               '</description>'
         )
-
+    
     def test_kml_document_with_cdata_description_2(self):
         """Tests the creation of a KML document with a CDATA element."""
         
