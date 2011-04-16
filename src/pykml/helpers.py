@@ -1,4 +1,5 @@
 from pykml.factory import KML_ElementMaker as K
+from pykml.factory import GX_ElementMaker as GX
 
 def separate_namespace(qname):
     "Separate the namespace from the element"
@@ -13,18 +14,112 @@ def separate_namespace(qname):
 def set_max_decimal_places(doc, max_decimals):
     "Reduces the number of decimal places used in elements"
     
+    def replace_delimited_string_member(
+            delimited_str,
+            separator,
+            index_no,
+            decimal_places):
+        "Modify the number of decimal places for a delimiment string member"
+        values = delimited_str.split(separator)
+        values[index_no] = str(round(float(values[index_no]), decimal_places))
+        return separator.join(values)
+    
     if max_decimals.has_key('longitude'):
+        data_type = 'longitude'
+        index_no = 0 # longitude is in the first position
+        # modify <longitude>
         for el in doc.findall(".//{http://www.opengis.net/kml/2.2}longitude"):
-            new_val = round(float(el.text), max_decimals['longitude'])
+            new_val = round(float(el.text), max_decimals[data_type])
             el.getparent().longitude = K.longitude(new_val)
+        # modify <coordinates> elements
+        for el in doc.findall(".//{http://www.opengis.net/kml/2.2}coordinates"):
+            vertex_str_list = []
+            for vertex in el.text.strip().split(' '):
+                vertex_str_list.append(
+                    replace_delimited_string_member(
+                        delimited_str=vertex,
+                        separator=',',
+                        index_no=index_no,
+                        decimal_places=max_decimals[data_type]
+                    )
+                )
+            el_new = K.coordinates(' '.join(vertex_str_list).strip())
+            el.getparent().replace(el, el_new)
+        # modify <gx:coords> elements
+        for el in doc.findall(".//{http://www.google.com/kml/ext/2.2}coord"):
+            el._setText(
+                replace_delimited_string_member(
+                    delimited_str=el.text,
+                    separator=' ',
+                    index_no=index_no,
+                    decimal_places=max_decimals[data_type]
+                )
+            )
+    
     if max_decimals.has_key('latitude'):
+        data_type = 'latitude'
+        index_no = 1 # latitude is in the second position
+        # modify <latitude> elements
         for el in doc.findall(".//{http://www.opengis.net/kml/2.2}latitude"):
-            new_val = round(float(el.text), max_decimals['latitude'])
+            new_val = round(float(el.text), max_decimals[data_type])
             el.getparent().latitude = K.latitude(new_val)
+        # modify <coordinates> elements
+        for el in doc.findall(".//{http://www.opengis.net/kml/2.2}coordinates"):
+            vertex_str_list = []
+            for vertex in el.text.strip().split(' '):
+                vertex_str_list.append(
+                    replace_delimited_string_member(
+                        delimited_str=vertex,
+                        separator=',',
+                        index_no=index_no,
+                        decimal_places=max_decimals[data_type]
+                    )
+                )
+            el_new = K.coordinates(' '.join(vertex_str_list).strip())
+            el.getparent().replace(el, el_new)
+        # modify <gx:coords> elements
+        for el in doc.findall(".//{http://www.google.com/kml/ext/2.2}coord"):
+            el._setText(
+                replace_delimited_string_member(
+                    delimited_str=el.text,
+                    separator=' ',
+                    index_no=index_no,
+                    decimal_places=max_decimals[data_type]
+                )
+            )
+
     if max_decimals.has_key('altitude'):
+        data_type = 'altitude'
+        index_no = 2 # altitude is in the third position
+        # modify <altitude> elements
         for el in doc.findall(".//{http://www.opengis.net/kml/2.2}altitude"):
-            new_val = round(float(el.text), max_decimals['altitude'])
+            new_val = round(float(el.text), max_decimals[data_type])
             el.getparent().altitude = K.altitude(new_val)
+        # modify <coordinates> elements
+        for el in doc.findall(".//{http://www.opengis.net/kml/2.2}coordinates"):
+            vertex_str_list = []
+            for vertex in el.text.strip().split(' '):
+                vertex_str_list.append(
+                    replace_delimited_string_member(
+                        delimited_str=vertex,
+                        separator=',',
+                        index_no=index_no,
+                        decimal_places=max_decimals[data_type]
+                    )
+                )
+            el_new = K.coordinates(' '.join(vertex_str_list).strip())
+            el.getparent().replace(el, el_new)
+        # modify <gx:coords> elements
+        for el in doc.findall(".//{http://www.google.com/kml/ext/2.2}coord"):
+            el._setText(
+                replace_delimited_string_member(
+                    delimited_str=el.text,
+                    separator=' ',
+                    index_no=index_no,
+                    decimal_places=max_decimals[data_type]
+                )
+            )
+    
     if max_decimals.has_key('heading'):
         for el in doc.findall(".//{http://www.opengis.net/kml/2.2}heading"):
             new_val = round(float(el.text), max_decimals['heading'])
@@ -37,26 +132,3 @@ def set_max_decimal_places(doc, max_decimals):
         for el in doc.findall(".//{http://www.opengis.net/kml/2.2}range"):
             new_val = round(float(el.text), max_decimals['range'])
             el.getparent().range = K.range(new_val)
-    # reduce decimals in the coordinate string using nested list comprehension
-    for el in doc.findall(".//{http://www.opengis.net/kml/2.2}coordinates"):
-        vertex_str_list = []
-        for vertex in el.text.strip().split(' '):
-            coord_list = vertex.split(',')
-            if len(coord_list)==2:
-                vertex_str_list.append(
-                    '{lon},{lat}'.format(
-                        lon=round(float(coord_list[0]), max_decimals['longitude']),
-                        lat=round(float(coord_list[1]), max_decimals['latitude']),
-                    )
-                )
-            else:
-                vertex_str_list.append(
-                    '{lon},{lat},{alt}'.format(
-                        lon=round(float(coord_list[0]), max_decimals['longitude']),
-                        lat=round(float(coord_list[1]), max_decimals['latitude']),
-                        alt=round(float(coord_list[2]), max_decimals['altitude']),
-                    )
-                )
-        new_coord_string = ' '.join(vertex_str_list).strip()
-        el.getparent().coordinates = K.coordinates(new_coord_string)
-
