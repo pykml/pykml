@@ -1,5 +1,9 @@
 Tyler A. Erickson (Michigan Tech Research Institute)
 
-Some of this work was supported by a grant from the U.S. Fish and Wildlife
-Service (http://www.fws.gov/).
-
+This work was supported in part by:
+* Michigan Tech Research Institute
+  http://mtri.org
+* U.S. Fish and Wildlife Service
+  http://www.fws.gov
+* U.S. National Oceanic and Atmospheric Administration Climate Program Office
+  http://www.climate.noaa.gov/cpo/
