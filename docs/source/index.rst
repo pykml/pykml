@@ -9,12 +9,12 @@ Welcome
 Contents:
 
 .. toctree::
-   :maxdepth: 2
-   
-   intro
-   install
-   tutorial
-   
+    :maxdepth: 2
+
+    intro
+    tutorial
+    modules
+
 
 Indices and tables
 ==================
