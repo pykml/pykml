@@ -1,6 +1,10 @@
-'''
-Create LXML ElementMaker (factory) objects that create KML objects using the 
-appropriate namespaces
+'''Factory objects for creating KML elements
+
+The factory module leverages `lxml's ElementMaker factory`_ objects to create
+KML objects with the appropriate namespace prefixes.
+
+.. _lxml: http://lxml.de
+.. _lxml's ElementMaker factory: http://lxml.de/objectify.html#tree-generation-with-the-e-factory
 '''
 
 from lxml import etree, objectify

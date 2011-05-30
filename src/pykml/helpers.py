@@ -1,3 +1,7 @@
+"""'helper' methods that operate on pyKML document objects
+
+"""
+
 from pykml.factory import KML_ElementMaker as K
 from pykml.factory import GX_ElementMaker as GX
 
@@ -12,14 +16,18 @@ def separate_namespace(qname):
     return namespace, element_name
 
 def set_max_decimal_places(doc, max_decimals):
-    "Reduces the number of decimal places used in elements"
+    """Sets the maximum number of decimal places used by KML elements
+    
+    This method facilitates reducing the file size of the resulting KML
+    document.
+    """
     
     def replace_delimited_string_member(
             delimited_str,
             separator,
             index_no,
             decimal_places):
-        "Modify the number of decimal places for a delimiment string member"
+        "Modify the number of decimal places for a delimited string member"
         values = delimited_str.split(separator)
         values[index_no] = str(round(float(values[index_no]), decimal_places))
         return separator.join(values)
