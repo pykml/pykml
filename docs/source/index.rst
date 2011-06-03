@@ -13,6 +13,7 @@ Contents:
 
     intro
     tutorial
+    examples
     modules
 
 

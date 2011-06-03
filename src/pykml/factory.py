@@ -11,6 +11,7 @@ from lxml import etree, objectify
 
 nsmap={
     None: "http://www.opengis.net/kml/2.2",
+    'kml': "http://www.opengis.net/kml/2.2",
     'atom': "http://www.w3.org/2005/Atom",
     'gx': "http://www.google.com/kml/ext/2.2",
 }
@@ -24,14 +25,14 @@ KML_ElementMaker = objectify.ElementMaker(
 # create a factory object for creating objects in the ATOM namespace
 ATOM_ElementMaker = objectify.ElementMaker(
     annotate=False,
-    namespace="http://www.w3.org/2005/Atom",
-    nsmap={'atom': "http://www.w3.org/2005/Atom"},
+    namespace=nsmap['atom'],
+    nsmap={'atom': nsmap['atom']},
 )
 # Create a factory object for the KML Google Extension namespace
 GX_ElementMaker = objectify.ElementMaker(
     annotate=False,
-    namespace="http://www.google.com/kml/ext/2.2",
-    nsmap={'gx': "http://www.google.com/kml/ext/2.2"},
+    namespace=nsmap['gx'],
+    nsmap={'gx': nsmap['gx']},
 )
 
 def get_factory_object_name(namespace):

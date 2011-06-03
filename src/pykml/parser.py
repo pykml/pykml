@@ -13,8 +13,15 @@ class Schema():
             self.schema = etree.XMLSchema(file=f)
     
     def validate(self, doc):
-        "Validate an XML document"
+        "Checks if an XML document is valid (returns: boolean)"
         return self.schema.validate(doc)
+    
+    def assertValid(self, doc):
+        """Checks if an XML document is valid (returns: None or an exception)
+        
+        The method generates a validation error if the document is not valid
+        """
+        return self.schema.assertValid(doc)
 
 def fromstring(text, schema=None):
     "Parses a file object using the KML OGC schema"

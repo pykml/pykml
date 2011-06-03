@@ -7,24 +7,24 @@ http://code.google.com/apis/kml/documentation/kmlfiles/altitudemode_reference.km
 
 from lxml import etree
 from pykml.kml_gx import schema
-from pykml.kml_gx.factory import KML_ElementMaker as K
+from pykml.kml_gx.factory import KML_ElementMaker as KML
 from pykml.kml_gx.factory import GX_ElementMaker as GX
 
-doc = K.kml(
-    K.Placemark(
-        K.name("gx:altitudeMode Example"),
-        K.LookAt(
-            K.longitude(146.806),
-            K.latitude(12.219),
-            K.heading(-60),
-            K.tilt(70),
-            K.range(6300),
+doc = KML.kml(
+    KML.Placemark(
+        KML.name("gx:altitudeMode Example"),
+        KML.LookAt(
+            KML.longitude(146.806),
+            KML.latitude(12.219),
+            KML.heading(-60),
+            KML.tilt(70),
+            KML.range(6300),
             GX.altitudeMode("relativeToSeaFloor"),
         ),
-        K.LineString(
-            K.extrude(1),
+        KML.LineString(
+            KML.extrude(1),
             GX.altitudeMode("relativeToSeaFloor"),
-            K.coordinates(
+            KML.coordinates(
               "146.825,12.233,400 "
               "146.820,12.222,400 "
               "146.812,12.212,400 "
