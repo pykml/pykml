@@ -11,7 +11,6 @@ from lxml import etree, objectify
 
 nsmap={
     None: "http://www.opengis.net/kml/2.2",
-    'kml': "http://www.opengis.net/kml/2.2",
     'atom': "http://www.w3.org/2005/Atom",
     'gx': "http://www.google.com/kml/ext/2.2",
 }
