@@ -3,15 +3,43 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome
-=================================
+Welcome to pyKML
+================
 
-Contents:
+pyKML is a Python package for creating, parsing, manipulating, and validating 
+KML_ documents.
+
+pyKML is based on the `lxml.objectify API`_ which provides a Pythonic API 
+for working with XML documents.  pyKML adds additional functionality specific 
+to the KML language.
+
+KML comes in several flavors.   pyKML can be used with KML documents that 
+follow the base `OGC KML`_ specification, the `Google Extensions Namespace`_, 
+or a user-supplied extension to the base KML specification (defined by an XML
+Schema document).
+
+pyKML is an open source. 
+`Packaged releases`_ can be found on the 
+Python Package Index (PyPI). 
+Developers can download the `pyKML source code`_ and noodle with it.
+`Bugs and enhancement requests`_ are appreciated.
+
+
+.. _KML: http://code.google.com/apis/kml/documentation/
+.. _OGC KML: http://www.opengeospatial.org/standards/kml/
+.. _Google Extensions Namespace: http://code.google.com/apis/kml/documentation/kmlreference.html#kmlextensions
+.. _lxml.objectify API: http://codespeak.net/lxml/objectify.html
+.. _Packaged releases: http://pypi.python.org/pypi/pykml
+.. _pyKML source code: http://code.google.com/p/pykml/
+.. _Bugs and enhancement requests: http://code.google.com/p/pykml/
+
+Contents
+==================
 
 .. toctree::
     :maxdepth: 2
 
-    intro
+    installation
     tutorial
     examples
     modules
