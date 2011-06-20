@@ -8,3 +8,4 @@ Contents:
 
     examples/kml_reference_examples
     examples/tour_examples
+    examples/misc_examples
