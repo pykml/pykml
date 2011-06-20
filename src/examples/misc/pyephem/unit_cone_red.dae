@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA version="1.4.0" xmlns="http://www.collada.org/2005/11/COLLADASchema">
+	<asset>
+		<contributor>
+			<author>Illusoft Collada 1.4.0 plugin for Blender - http://colladablender.illusoft.com</author>
+			<authoring_tool>Blender v:249 - Illusoft Collada Exporter v:0.3.162</authoring_tool>
+			<comments></comments>
+			<copyright></copyright>
+			<source_data>file:///home/terickson/temp/blender/unit_cylinder_red.dae.blend</source_data>
+		</contributor>
+		<created>2011-06-19T20:06:45.786288</created>
+		<modified>2011-06-19T20:06:45.786313</modified>
+		<unit meter="0.01" name="centimeter"/>
+		<up_axis>Z_UP</up_axis>
+	</asset>
+	<library_effects>
+		<effect id="Material_001-fx" name="Material_001-fx">
+			<profile_COMMON>
+				<technique sid="blender">
+					<phong>
+						<emission>
+							<color>0.00000 0.00000 0.00000 1</color>
+						</emission>
+						<ambient>
+							<color>0.50000 0.00000 0.00000 1</color>
+						</ambient>
+						<diffuse>
+							<color>1.00000 0.00000 0.00000 1</color>
+						</diffuse>
+						<specular>
+							<color>0.50000 0.50000 0.50000 1</color>
+						</specular>
+						<shininess>
+							<float>12.5</float>
+						</shininess>
+						<reflective>
+							<color>1.00000 1.00000 1.00000 1</color>
+						</reflective>
+						<reflectivity>
+							<float>0.0</float>
+						</reflectivity>
+						<transparent>
+							<color>1 1 1 1</color>
+						</transparent>
+						<transparency>
+							<float>0.0</float>
+						</transparency>
+					</phong>
+				</technique>
+			</profile_COMMON>
+		</effect>
+	</library_effects>
+	<library_materials>
+		<material id="Material_001" name="Material_001">
+			<instance_effect url="#Material_001-fx"/>
+		</material>
+	</library_materials>
+	<library_geometries>
+		<geometry id="Cone_001" name="Cone_001">
+			<mesh>
+				<source id="Cone_001-Position">
+					<float_array count="51" id="Cone_001-Position-array">0.70711 0.70711 -0.50000 0.92388 0.38268 -0.50000 1.00000 -0.00000 -0.50000 0.92388 -0.38268 -0.50000 0.70711 -0.70711 -0.50000 0.38268 -0.92388 -0.50000 0.00000 -1.00000 -0.50000 -0.38268 -0.92388 -0.50000 -0.70711 -0.70711 -0.50000 -0.92388 -0.38268 -0.50000 -1.00000 0.00000 -0.50000 -0.92388 0.38268 -0.50000 -0.70711 0.70711 -0.50000 -0.38268 0.92388 -0.50000 0.00000 1.00000 -0.50000 0.38268 0.92388 -0.50000 0.00000 0.00000 0.50000</float_array>
+					<technique_common>
+						<accessor count="17" source="#Cone_001-Position-array" stride="3">
+							<param type="float" name="X"></param>
+							<param type="float" name="Y"></param>
+							<param type="float" name="Z"></param>
+						</accessor>
+					</technique_common>
+				</source>
+				<source id="Cone_001-Normals">
+					<float_array count="48" id="Cone_001-Normals-array">0.59361 0.39664 0.70021 0.70021 0.13928 0.70021 0.70021 -0.13928 0.70021 0.59361 -0.39664 0.70021 0.39664 -0.59361 0.70021 0.13928 -0.70021 0.70021 -0.13928 -0.70021 0.70021 -0.39664 -0.59361 0.70021 -0.59361 -0.39664 0.70021 -0.70021 -0.13928 0.70021 -0.70021 0.13928 0.70021 -0.59361 0.39664 0.70021 -0.39664 0.59361 0.70021 -0.13928 0.70021 0.70021 0.13928 0.70021 0.70021 0.39664 0.59361 0.70021</float_array>
+					<technique_common>
+						<accessor count="16" source="#Cone_001-Normals-array" stride="3">
+							<param type="float" name="X"></param>
+							<param type="float" name="Y"></param>
+							<param type="float" name="Z"></param>
+						</accessor>
+					</technique_common>
+				</source>
+				<source id="Cone_001-UV">
+					<float_array count="96" id="Cone_001-UV-array">0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 0.00000 1.00000 0.00000 1.00000 1.00000</float_array>
+					<technique_common>
+						<accessor count="48" source="#Cone_001-UV-array" stride="2">
+							<param type="float" name="S"></param>
+							<param type="float" name="T"></param>
+						</accessor>
+					</technique_common>
+				</source>
+				<vertices id="Cone_001-Vertex">
+					<input semantic="POSITION" source="#Cone_001-Position"/>
+				</vertices>
+				<triangles count="16" material="Material_001">
+					<input offset="0" semantic="VERTEX" source="#Cone_001-Vertex"/>
+					<input offset="1" semantic="NORMAL" source="#Cone_001-Normals"/>
+					<input offset="2" semantic="TEXCOORD" source="#Cone_001-UV"/>
+					<p>1 0 0 0 0 1 16 0 2 16 1 3 2 1 4 1 1 5 16 2 6 3 2 7 2 2 8 16 3 9 4 3 10 3 3 11 16 4 12 5 4 13 4 4 14 16 5 15 6 5 16 5 5 17 16 6 18 7 6 19 6 6 20 16 7 21 8 7 22 7 7 23 16 8 24 9 8 25 8 8 26 16 9 27 10 9 28 9 9 29 16 10 30 11 10 31 10 10 32 16 11 33 12 11 34 11 11 35 16 12 36 13 12 37 12 12 38 16 13 39 14 13 40 13 13 41 16 14 42 15 14 43 14 14 44 16 15 45 0 15 46 15 15 47</p>
+				</triangles>
+			</mesh>
+		</geometry>
+	</library_geometries>
+	<library_visual_scenes>
+		<visual_scene id="Scene" name="Scene">
+			<node layer="L1" id="Cone" name="Cone">
+				<translate sid="translate">0.00000 0.00000 0.50000</translate>
+				<rotate sid="rotateZ">0 0 1 0.00000</rotate>
+				<rotate sid="rotateY">0 1 0 -0.00000</rotate>
+				<rotate sid="rotateX">1 0 0 180.00000</rotate>
+				<scale sid="scale">1.00000 -1.00000 1.00000</scale>
+				<instance_geometry url="#Cone_001">
+					<bind_material>
+						<technique_common>
+							<instance_material symbol="Material_001" target="#Material_001">
+								<bind_vertex_input input_semantic="TEXCOORD" input_set="1" semantic="CHANNEL1"/>
+							</instance_material>
+						</technique_common>
+					</bind_material>
+				</instance_geometry>
+			</node>
+		</visual_scene>
+	</library_visual_scenes>
+	<library_physics_materials>
+		<physics_material id="Cone-PhysicsMaterial" name="Cone-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.5</dynamic_friction>
+				<restitution>0.0</restitution>
+				<static_friction>0.5</static_friction>
+			</technique_common>
+		</physics_material>
+	</library_physics_materials>
+	<library_physics_models>
+		<physics_model id="Scene-PhysicsModel" name="Scene-PhysicsModel">
+			<rigid_body name="Cone-RigidBody" sid="Cone-RigidBody">
+				<technique_common>
+					<dynamic>false</dynamic>
+					<mass>0</mass>
+					<instance_physics_material url="#Cone-PhysicsMaterial"/>
+					<shape>
+						<instance_geometry url="#Cone_001"/>
+					</shape>
+				</technique_common>
+			</rigid_body>
+		</physics_model>
+	</library_physics_models>
+	<library_physics_scenes>
+		<physics_scene id="Scene-Physics" name="Scene-Physics">
+			<instance_physics_model url="#Scene-PhysicsModel">
+				<instance_rigid_body body="Cone-RigidBody" target="#Cone"/>
+			</instance_physics_model>
+		</physics_scene>
+	</library_physics_scenes>
+	<scene>
+		<instance_physics_scene url="#Scene-Physics"/>
+		<instance_visual_scene url="#Scene"/>
+	</scene>
+</COLLADA>
