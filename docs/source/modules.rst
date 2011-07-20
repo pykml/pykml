@@ -4,6 +4,8 @@ pyKML Modules
 The pyKML library is separated into several modules, based on similar 
 functionality.
 
+.. _pykml-factory:
+
 :mod:`pykml.factory`
 --------------------
 
