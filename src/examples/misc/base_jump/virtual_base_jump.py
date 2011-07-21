@@ -3,10 +3,10 @@
 # example virtual base jump
 import math
 from lxml import etree
-from pykml.kml_gx import schema
-from pykml.kml_gx.factory import KML_ElementMaker as kml
-from pykml.kml_gx.factory import ATOM_ElementMaker as atom
-from pykml.kml_gx.factory import GX_ElementMaker as gx
+from pykml.parser import Schema
+from pykml.factory import KML_ElementMaker as kml
+from pykml.factory import ATOM_ElementMaker as atom
+from pykml.factory import GX_ElementMaker as gx
 
 GX_ns = "{http://www.google.com/kml/ext/2.2}"
 
@@ -94,5 +94,10 @@ for t in drange(0,15,tstep):
     )
     tour_doc.Folder[GX_ns+"Tour"].Playlist.append(flyto)
     
-assert schema.validate(tour_doc)
+
+assert Schema('kml22gx.xsd').validate(tour_doc)
 print etree.tostring(tour_doc, pretty_print=True)
+
+# output a KML file (named based on the Python script)
+outfile = file(__file__.rstrip('.py')+'.kml','w')
+outfile.write(etree.tostring(tour_doc, pretty_print=True))

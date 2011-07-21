@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''Generate a KML string that matches the animated update example.
 
 References:
@@ -11,9 +12,9 @@ is not valid.
 '''
 
 from lxml import etree
-from pykml.kml_gx import schema
-from pykml.kml_gx.factory import KML_ElementMaker as KML
-from pykml.kml_gx.factory import GX_ElementMaker as GX
+from pykml.parser import Schema
+from pykml.factory import KML_ElementMaker as KML
+from pykml.factory import GX_ElementMaker as GX
 
 doc = KML.kml(
   KML.Document(
@@ -71,4 +72,11 @@ doc = KML.kml(
 )
 
 print etree.tostring(doc, pretty_print=True)
-schema.assertValid(doc)
+
+# output a KML file (named based on the Python script)
+outfile = file(__file__.rstrip('.py')+'.kml','w')
+outfile.write(etree.tostring(doc, pretty_print=True))
+
+schema = Schema('kml22gx.xsd')
+import ipdb; ipdb.set_trace()
+schema.validate(doc)

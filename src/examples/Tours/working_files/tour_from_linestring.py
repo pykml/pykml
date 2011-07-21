@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''Generate a KML document of a tour based on a KML linestring.
 
 '''
@@ -9,7 +10,7 @@ from pykml.parser import Schema
 from lxml import etree
 
 # define variables for the namespace URL strings
-kmlns = '{' + nsmap['kml'] + '}'
+kmlns = '{}' #'{' + nsmap['kml'] + '}'
 gxns = '{' + nsmap['gx'] + '}'
 
 # start with a base KML tour and playlist
@@ -25,11 +26,8 @@ with open("colorado_river_linestring.kml") as f:
 
 # get the coordinate string of the first KML coordinate element
 coord_str = str(
-    linestring_doc.find(".//{http://www.opengis.net/kml/2.2}coordinates")
+    linestring_doc.getroot().find(".//{http://www.opengis.net/kml/2.2}coordinates")
 ).strip()
-
-#import ipdb; ipdb.set_trace()
-#pass
 
 for vertex in coord_str.split(' '):
     (lon,lat,alt) = vertex.split(',')
@@ -47,6 +45,9 @@ for vertex in coord_str.split(' '):
     )
     tour_doc[gxns+"Tour"].Playlist.append(flyto)
 
-assert schema.validate(tour_doc)
+assert Schema('kml22gx.xsd').validate(tour_doc)
 print etree.tostring(tour_doc, pretty_print=True)
 
+# output a KML file (named based on the Python script)
+outfile = file(__file__.rstrip('.py')+'.kml','w')
+outfile.write(etree.tostring(tour_doc, pretty_print=True))
