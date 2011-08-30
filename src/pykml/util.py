@@ -1,4 +1,8 @@
-""" UTIL - a collection of utility methods that operate on KML documents"""
+""" pyKML Utility Module
+
+The pykml.utility module provides utility functions  that operate on KML 
+documents
+"""
 import re
 
 def count_elements(doc):

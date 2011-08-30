@@ -1,4 +1,7 @@
-"""'helper' methods that operate on pyKML document objects
+"""pyKML Helpers Module
+
+The pykml.helpers module contains 'helper' functions that operate on pyKML 
+document objects for accomplishing common tasks.
 
 """
 
@@ -6,7 +9,7 @@ from pykml.factory import KML_ElementMaker as K
 from pykml.factory import GX_ElementMaker as GX
 
 def separate_namespace(qname):
-    "Separate the namespace from the element"
+    "Separates the namespace from the element"
     import re
     try:
         namespace, element_name = re.search('^{(.+)}(.+)$', qname).groups()
@@ -18,8 +21,7 @@ def separate_namespace(qname):
 def set_max_decimal_places(doc, max_decimals):
     """Sets the maximum number of decimal places used by KML elements
     
-    This method facilitates reducing the file size of the resulting KML
-    document.
+    This method facilitates reducing the file size of a KML document.
     """
     
     def replace_delimited_string_member(

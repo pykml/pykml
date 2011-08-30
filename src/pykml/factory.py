@@ -1,5 +1,7 @@
-'''Factory objects for creating KML elements
+'''pyKML Factory Module
 
+The pykml.factory module provides objects and functions that can be used to 
+create KML documents element-by-element. 
 The factory module leverages `lxml's ElementMaker factory`_ objects to create
 KML objects with the appropriate namespace prefixes.
 
@@ -53,7 +55,7 @@ def get_factory_object_name(namespace):
     return factory_object_name
 
 def write_python_script_for_kml_document(doc):
-    "Generate a python script that will construct a given KML document"
+    "Generates a python script that will construct a given KML document"
     import StringIO
     from pykml.helpers import separate_namespace
     
