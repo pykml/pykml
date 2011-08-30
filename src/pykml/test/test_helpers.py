@@ -79,8 +79,8 @@ class KmlHelpersTestCase(unittest.TestCase):
                 'longitude': 6,
                 'latitude': 5,
                 'altitude': 2,
-#                'heading': 1,
-#                'tilt': 0,
+                'heading': 1,
+                'tilt': 0,
                 #'range': 0,  # range values will not be changed
             }
         )
@@ -88,20 +88,21 @@ class KmlHelpersTestCase(unittest.TestCase):
         longitude_list = doc.findall(".//{http://www.opengis.net/kml/2.2}longitude")
         self.assertAlmostEquals(longitude_list[0], -105.638133)
         
-#        latitude_list = doc.findall(".//{http://www.opengis.net/kml/2.2}latitude")
-#        self.assertAlmostEquals(latitude_list[0], 40.25542)
-#        
-#        altitude_list = doc.findall(".//{http://www.opengis.net/kml/2.2}altitude")
-#        self.assertAlmostEquals(altitude_list[0], 0.12)
-#        
-#        heading_list = doc.findall(".//{http://www.opengis.net/kml/2.2}heading")
-#        self.assertAlmostEquals(heading_list[0], -75.3)
-#        
-#        tilt_list = doc.findall(".//{http://www.opengis.net/kml/2.2}tilt")
-#        self.assertAlmostEquals(tilt_list[0], 23.0)
-#        
-#        range_list = doc.findall(".//{http://www.opengis.net/kml/2.2}range")
-#        self.assertAlmostEquals(range_list[0], 234.1234567890)
+        latitude_list = doc.findall(".//{http://www.opengis.net/kml/2.2}latitude")
+        self.assertAlmostEquals(latitude_list[0], 40.25542)
+        
+        altitude_list = doc.findall(".//{http://www.opengis.net/kml/2.2}altitude")
+        self.assertAlmostEquals(altitude_list[0], 0.12)
+        
+        heading_list = doc.findall(".//{http://www.opengis.net/kml/2.2}heading")
+        self.assertAlmostEquals(heading_list[0], -75.3)
+        
+        tilt_list = doc.findall(".//{http://www.opengis.net/kml/2.2}tilt")
+        self.assertAlmostEquals(tilt_list[0], 23.0)
+        
+        # Note that the range value was not changed
+        range_list = doc.findall(".//{http://www.opengis.net/kml/2.2}range")
+        self.assertAlmostEquals(range_list[0], 234.1234567890)
         
         coords_list = doc.findall(".//{http://www.opengis.net/kml/2.2}coordinates")
         self.assertEquals(
