@@ -37,4 +37,3 @@ functionality.
     :members:
     :undoc-members:
     :show-inheritance:
-

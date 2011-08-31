@@ -1,7 +1,7 @@
 pyKML Examples
 ===============
 
-Contents:
+Below are links to various examples on how to use pyKML.
 
 .. toctree::
     :maxdepth: 2

@@ -22,7 +22,7 @@ pyKML is open source.
 `Packaged releases`_ can be found on the 
 Python Package Index (PyPI). 
 Developers can download the `pyKML source code`_ and noodle with it.
-`Bug reports and enhancement requests`_ are appreciated.
+`Bug reports, enhancement requests`_ and examples of using pyKML are appreciated.
 
 
 .. _KML: http://code.google.com/apis/kml/documentation/
@@ -31,7 +31,7 @@ Developers can download the `pyKML source code`_ and noodle with it.
 .. _lxml.objectify API: http://codespeak.net/lxml/objectify.html
 .. _Packaged releases: http://pypi.python.org/pypi/pykml
 .. _pyKML source code: http://code.google.com/p/pykml/
-.. _Bug reports and enhancement requests: http://code.google.com/p/pykml/
+.. _Bug reports, enhancement requests: http://code.google.com/p/pykml/
 
 Contents
 ==================
