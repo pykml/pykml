@@ -322,9 +322,10 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         # execute the temporary python file to create a KML file
         import subprocess
         current_env = os.environ.copy()
-        current_env["PYTHONPATH"] = os.path.abspath(os.path.join(os.getcwd(),'..'))
+        current_env["PYTHONPATH"] = os.path.abspath(
+                                    os.path.join(path.dirname(__file__),'../..')
+                                )
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
-        #print temp_kml_file
         with open(temp_kml_file, 'w') as f:
             exit_code = subprocess.call(
                     ["python",tfile],
@@ -357,14 +358,18 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')
-        #print tfile
+        #print tfile  #uncomment to print the temporary filename
         with open(tfile, 'w') as f:
             f.write(script)
         
         # execute the temporary python file to create a KML file
+        # set the PYTHONPATH variable so that it references the root
+        # of the pyKML library
         import subprocess
         current_env = os.environ.copy()
-        current_env["PYTHONPATH"] = os.path.abspath(os.path.join(os.getcwd(),'..'))
+        current_env["PYTHONPATH"] = os.path.abspath(
+                                    os.path.join(path.dirname(__file__),'../..')
+                                )
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
         #print temp_kml_file
         with open(temp_kml_file, 'w') as f:
@@ -402,7 +407,9 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         # execute the temporary python file to create a KML file
         import subprocess
         current_env = os.environ.copy()
-        current_env["PYTHONPATH"] = os.path.abspath(os.path.join(os.getcwd(),'..'))
+        current_env["PYTHONPATH"] = os.path.abspath(
+                                    os.path.join(path.dirname(__file__),'../..')
+                                )
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
         #print temp_kml_file  # Useful for debugging
         with open(temp_kml_file, 'w') as f:
