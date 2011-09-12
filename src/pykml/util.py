@@ -21,3 +21,12 @@ def count_elements(doc):
         else:
             summary[namespace][element_name] += 1
     return summary
+    
+def wrap_angle180(angle):
+    # returns an angle such that -180 < angle <= 180
+    try:
+        # if angle is a sequence
+        return [((a+180) % 360 ) - 180 for a in angle]
+    except TypeError:
+        return ((angle+180) % 360 ) - 180
+

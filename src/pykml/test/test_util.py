@@ -29,3 +29,16 @@ class KmlUtilTestCase(unittest.TestCase):
         self.assertEqual(2,
             summary['http://www.google.com/kml/ext/2.2']['Wait']
         )
+        
+    
+    def test_wrap_angle180(self):
+        """Tests the wrap_angle180 utility function."""
+        from pykml.util import wrap_angle180
+        
+        self.assertEqual(wrap_angle180(0), 0)
+        self.assertEqual(wrap_angle180(180), -180)
+        self.assertEqual(wrap_angle180(361), 1)
+        # test passing an array
+        self.assertEqual(wrap_angle180([0,180,361,]), [0,-180,1,])
+        
+        
