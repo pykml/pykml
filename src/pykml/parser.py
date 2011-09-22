@@ -4,14 +4,21 @@ The pykml.parser module provides functions that can be used to parse KML
 from a file or remote URL.
 '''
 import os
+import urllib2
 from lxml import etree, objectify
 
 class Schema():
     "A class representing an XML Schema used to validate KML documents"
     def __init__(self, schema):
-        module_dir = os.path.split(__file__)[0]   # get the module path
-        schema_file = os.path.join(module_dir, "schemas", schema)
-        with open(schema_file) as f:
+        try:
+            module_dir = os.path.split(__file__)[0]   # get the module path
+            schema_file = os.path.join(module_dir, "schemas", schema)
+            # try to open a local file
+            with open(schema_file) as f:
+                self.schema = etree.XMLSchema(file=f)
+        except:
+            # try to open a remote URL
+            f = urllib2.urlopen(schema)
             self.schema = etree.XMLSchema(file=f)
     
     def validate(self, doc):

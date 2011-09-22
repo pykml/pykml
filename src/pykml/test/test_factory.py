@@ -47,7 +47,11 @@ class KmlFactoryTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertTrue(Schema("kml22gx.xsd").validate(doc))
+        # validate against a local schema
+        self.assertTrue(Schema("ogckml22.xsd").validate(doc))
+        # validate against a remote schema
+        self.assertTrue(Schema("http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd").validate(doc))
+        
         self.assertEquals(
             etree.tostring(doc),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
@@ -380,7 +384,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         doc2 = parse(temp_kml_file, schema=schema)
         # test that the root element is as expected
         self.assertEqual(doc2.docinfo.root_name, 'kml')
-
+        
     def test_write_python_script_for_kml_document_with_comments(self):
         """Tests the creation of an OGC KML document with several comments"""
         import os
@@ -420,11 +424,9 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         doc2 = parse(temp_kml_file, schema=schema)
         # test that the root element is as expected
         self.assertEqual(doc2.docinfo.root_name, 'kml')
-        
+        # test that the original and generated documents are equivalent
         self.assertEqual(etree.tostring(doc), etree.tostring(doc2))
-        
-        #import ipdb; ipdb.set_trace()
-        pass
+
 
 if __name__ == '__main__':
     unittest.main()

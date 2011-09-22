@@ -15,6 +15,10 @@ class ValidatorTestCase(unittest.TestCase):
         schema = Schema("ogckml22.xsd")
         self.assertTrue(isinstance(schema.schema, etree.XMLSchema))
 
+    def test_initialize_schema_remote_url(self):
+        schema = Schema("http://code.google.com/apis/kml/schema/kml22gx.xsd")
+        self.assertTrue(isinstance(schema.schema, etree.XMLSchema))
+
 
 class ParseKmlOgcTestCase(unittest.TestCase):
     "A collection of tests related to parsing KML OGC documents"
@@ -77,6 +81,38 @@ class ParseKmlOgcTestCase(unittest.TestCase):
         except urllib2.URLError:
             print 'Unable to access the URL. Skipping test...'
     
+    def test_parse_kml_file_with_cdata(self):
+        "Tests the parsing of a local KML file, with a CDATA description string"
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_tutorial/using_the_cdata_element.kml'
+        )
+        # parse with validation
+        with open(test_datafile) as f:
+            doc = parse(f, schema=Schema('ogckml22.xsd'))
+        self.assertEquals(
+            etree.tostring(doc),
+            '<kml xmlns="http://www.opengis.net/kml/2.2">'
+              '<Document>'
+                '<Placemark>'
+                  '<name>CDATA example</name>'
+                  '<description>'
+                    '<![CDATA[\n'
+                    '          <h1>CDATA Tags are useful!</h1>\n'
+                    '          <p><font color="red">Text is <i>more readable</i> and \n'
+                    '          <b>easier to write</b> when you can avoid using entity \n'
+                    '          references.</font></p>\n'
+                    '        ]]>'
+                  '</description>'
+                '<Point>'
+                  '<coordinates>102.595626,14.996729</coordinates>'
+                '</Point>'
+              '</Placemark>'
+            '</Document>'
+          '</kml>'
+        )
+    
     def test_parse_invalid_ogc_kml_document(self):
         """Tests the parsing of an invalid KML document.  Note that this KML
         document uses elements that are not in the OGC KML spec.
@@ -92,6 +128,7 @@ class ParseKmlOgcTestCase(unittest.TestCase):
             self.assertTrue(True)
         except:
             self.assertTrue(False)
+
 
 class ParseKmlGxTestCase(unittest.TestCase):
     "A collection of tests related to parsing KML Google Extension documents"
@@ -120,45 +157,16 @@ class ParseKmlGxTestCase(unittest.TestCase):
             'testfiles',
             'google_kml_developers_guide/complete_tour_example.kml'
         )
-        # parse with validation
-        with open(test_datafile) as f:
-            doc = parse(f, schema=Schema('kml22gx.xsd'))
         # parse without validation
         with open(test_datafile) as f:
             doc = parse(f)
-        self.assertTrue(True)
-    
-    def test_parse_kml_file_with_cdata(self):
-        "Tests the parsing of a local KML file, with a CDATA description string"
-        test_datafile = path.join(
-            path.dirname(__file__),
-            'testfiles',
-            'google_kml_tutorial/using_the_cdata_element.kml'
-        )
-        # parse with validation
+        # parse with validation (local schema file)
         with open(test_datafile) as f:
             doc = parse(f, schema=Schema('kml22gx.xsd'))
-        self.assertEquals(
-            etree.tostring(doc),
-            '<kml xmlns="http://www.opengis.net/kml/2.2">'
-              '<Document>'
-                '<Placemark>'
-                  '<name>CDATA example</name>'
-                  '<description>'
-                    '<![CDATA[\n'
-                    '          <h1>CDATA Tags are useful!</h1>\n'
-                    '          <p><font color="red">Text is <i>more readable</i> and \n'
-                    '          <b>easier to write</b> when you can avoid using entity \n'
-                    '          references.</font></p>\n'
-                    '        ]]>'
-                  '</description>'
-                '<Point>'
-                  '<coordinates>102.595626,14.996729</coordinates>'
-                '</Point>'
-              '</Placemark>'
-            '</Document>'
-          '</kml>'
-        )
+        # parse with validation (remote schema file)
+        with open(test_datafile) as f:
+            doc = parse(f, schema=Schema('http://code.google.com/apis/kml/schema/kml22gx.xsd'))
+        self.assertTrue(True)
     
     def test_parse_kml_url_2(self):
         "Tests the parsing of a KML URL"
