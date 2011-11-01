@@ -112,6 +112,30 @@ class ParseKmlOgcTestCase(unittest.TestCase):
             '</Document>'
           '</kml>'
         )
+        # parse without validation
+        with open(test_datafile) as f:
+            doc2 = parse(f)
+        self.assertEquals(
+            etree.tostring(doc2),
+            '<kml xmlns="http://www.opengis.net/kml/2.2">'
+              '<Document>'
+                '<Placemark>'
+                  '<name>CDATA example</name>'
+                  '<description>'
+                    '<![CDATA[\n'
+                    '          <h1>CDATA Tags are useful!</h1>\n'
+                    '          <p><font color="red">Text is <i>more readable</i> and \n'
+                    '          <b>easier to write</b> when you can avoid using entity \n'
+                    '          references.</font></p>\n'
+                    '        ]]>'
+                  '</description>'
+                '<Point>'
+                  '<coordinates>102.595626,14.996729</coordinates>'
+                '</Point>'
+              '</Placemark>'
+            '</Document>'
+          '</kml>'
+        )
     
     def test_parse_invalid_ogc_kml_document(self):
         """Tests the parsing of an invalid KML document.  Note that this KML

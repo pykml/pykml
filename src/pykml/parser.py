@@ -59,4 +59,5 @@ def parse(fileobject, schema=None):
         return objectify.parse(fileobject, parser=parser)
     else:
         # without validation
-        return objectify.parse(fileobject)
+        parser = objectify.makeparser(strip_cdata=False)
+        return objectify.parse(fileobject, parser=parser)
