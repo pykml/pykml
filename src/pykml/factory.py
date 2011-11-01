@@ -180,3 +180,20 @@ def write_python_script_for_kml_document(doc):
     output.write('print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n')
     
     return output.getvalue()
+
+def kml2pykml():
+    "Generates a PyKML given KML filename"
+    from pykml.parser import parse
+    from optparse import OptionParser
+    parser = OptionParser(
+        usage="usage: %prog filename",
+        version="%prog 0.1",
+    )
+    (options, args) = parser.parse_args()
+    if len(args) != 1:
+        parser.error("wrong number of arguments")
+    else:
+        filename = args[0]
+    with open(filename) as f:
+        doc = parse(f, schema=None)
+        return write_python_script_for_kml_document(doc)

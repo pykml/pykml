@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.0'
+version = '0.1.1'
 
 setup(
     name='pykml',
@@ -55,4 +55,9 @@ provides Pythonic access to XML documents.
 
 See the Package Documentation for information on installation and usage.
 """,
+    entry_points = {
+        'console_scripts': [
+            'kml2pykml = pykml.factory:kml2pykml',
+        ],
+    }
 )
