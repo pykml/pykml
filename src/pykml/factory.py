@@ -94,7 +94,7 @@ def write_python_script_for_kml_document(doc):
                         text = '\n' + ''.join(
                                 ['{indent}{content}\n'.format(
                                         indent=' '*(len(t)-len(t.lstrip())),
-                                        content=repr(t.lstrip())
+                                        content=repr(t.strip() + ' ')
                                     ) for t in text_list if len(t.strip())>0
                                 ]
                             ) + indent
@@ -138,7 +138,7 @@ def write_python_script_for_kml_document(doc):
                         text = '\n' + ''.join(
                                 ['{indent}{content}\n'.format(
                                         indent=' '*(len(t)-len(t.lstrip())),
-                                        content=repr(t.lstrip())
+                                        content=repr(t.strip() + ' ')
                                     ) for t in text_list if len(t.strip())>0
                                 ]
                             ) + indent
@@ -179,21 +179,37 @@ def write_python_script_for_kml_document(doc):
     # add python code to print out the KML document
     output.write('print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n')
     
-    return output.getvalue()
+    contents = output.getvalue()
+    output.close()
+    return contents
 
 def kml2pykml():
-    "Generates a PyKML given KML filename"
+    "Parse a KML file and generates a pyKML script"
+    import urllib2
     from pykml.parser import parse
     from optparse import OptionParser
     parser = OptionParser(
-        usage="usage: %prog filename",
+        usage="usage: %prog FILENAME_or_URL",
         version="%prog 0.1",
     )
     (options, args) = parser.parse_args()
     if len(args) != 1:
         parser.error("wrong number of arguments")
     else:
-        filename = args[0]
-    with open(filename) as f:
-        doc = parse(f, schema=None)
-        return write_python_script_for_kml_document(doc)
+        uri = args[0]
+    try:
+        with open(uri) as f:
+            doc = parse(f, schema=None)
+    except IOError:
+        try:
+            f = urllib2.urlopen(uri)
+            doc = parse(f, schema=None)
+        finally:
+            #pass
+            try:
+                f
+            except NameError:
+                pass #variable was not defined
+            else:
+                f.close
+    print write_python_script_for_kml_document(doc)

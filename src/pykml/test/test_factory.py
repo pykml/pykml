@@ -2,6 +2,7 @@ import unittest
 from os import path
 from lxml import etree
 from pykml.parser import Schema
+from pykml.parser import parse
 from pykml.factory import KML_ElementMaker as KML
 from pykml.factory import ATOM_ElementMaker as ATOM
 from pykml.factory import GX_ElementMaker as GX
@@ -275,6 +276,54 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
         )
 
+    def test_write_python_script_for_multiline_coordinate_string(self):
+        """Tests the creation of a trivial OGC KML document."""
+        from pykml.factory import write_python_script_for_kml_document
+        
+        test_datafile = path.join(
+            path.dirname(__file__),
+            'testfiles',
+            'google_kml_reference/altitudemode_reference.kml'
+        )
+        with open(test_datafile) as f:
+            doc = parse(f, schema=None)
+        script = write_python_script_for_kml_document(doc)
+        self.assertEquals(
+            script,
+'from lxml import etree\n'
+'from pykml.factory import KML_ElementMaker as KML\n'
+'from pykml.factory import ATOM_ElementMaker as ATOM\n'
+'from pykml.factory import GX_ElementMaker as GX\n'
+'\n'
+'doc = KML.kml(\n'
+'  etree.Comment(\' required when using gx-prefixed elements \'),\n'
+'  KML.Placemark(\n'
+'    KML.name(\'gx:altitudeMode Example\'),\n'
+'    KML.LookAt(\n'
+'      KML.longitude(\'146.806\'),\n'
+'      KML.latitude(\'12.219\'),\n'
+'      KML.heading(\'-60\'),\n'
+'      KML.tilt(\'70\'),\n'
+'      KML.range(\'6300\'),\n'
+'      GX.altitudeMode(\'relativeToSeaFloor\'),\n'
+'    ),\n'
+'    KML.LineString(\n'
+'      KML.extrude(\'1\'),\n'
+'      GX.altitudeMode(\'relativeToSeaFloor\'),\n'
+'      KML.coordinates(\n'
+'      \'146.825,12.233,400 \'\n'
+'      \'146.820,12.222,400 \'\n'
+'      \'146.812,12.212,400 \'\n'
+'      \'146.796,12.209,400 \'\n'
+'      \'146.788,12.205,400 \'\n'
+'      ),\n'
+'    ),\n'
+'  ),\n'
+')\n'
+'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
+        )
+
+
     def test_write_python_script_for_kml_document_with_cdata(self):
         """Tests the creation of an OGC KML document with a cdata tag"""
         import os
@@ -304,10 +353,10 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             '    KML.Placemark(\n'
             '      KML.name(\'CDATA example\'),\n'
             '      KML.description(\n'
-            '          \'<h1>CDATA Tags are useful!</h1>\'\n'
+            '          \'<h1>CDATA Tags are useful!</h1> \'\n'
             '          \'<p><font color="red">Text is <i>more readable</i> and \'\n'
             '          \'<b>easier to write</b> when you can avoid using entity \'\n'
-            '          \'references.</font></p>\'\n'
+            '          \'references.</font></p> \'\n'
             '      ),\n'
             '      KML.Point(\n'
             '        KML.coordinates(\'102.595626,14.996729\'),\n'
