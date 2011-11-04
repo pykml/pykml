@@ -6,10 +6,9 @@ References:
 '''
 import csv
 import urllib2
-from datetime import time, datetime
+from datetime import datetime
 from lxml import etree
 from pykml.factory import KML_ElementMaker as KML
-from pykml.factory import GX_ElementMaker as GX
 
 def makeExtendedDataElements(datadict):
     '''Converts a dictionary to ExtendedData/Data elements'''
@@ -20,7 +19,6 @@ def makeExtendedDataElements(datadict):
 
 # create a KML document with a folder and a default style
 stylename = "earthquake-balloon-style"
-
 balloonstyle = KML.BalloonStyle(
     KML.text("""
 <table Border=1>
@@ -92,5 +90,3 @@ schema_gx = Schema("kml22gx.xsd")
 schema_gx.assertValid(doc)
 
 print etree.tostring(doc, pretty_print=True)
-#import ipdb; ipdb.set_trace()
-pass
