@@ -41,4 +41,3 @@ class KmlUtilTestCase(unittest.TestCase):
         # test passing an array
         self.assertEqual(wrap_angle180([0,180,361,]), [0,-180,1,])
         
-        

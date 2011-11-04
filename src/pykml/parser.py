@@ -50,7 +50,7 @@ def fromstring(text, schema=None):
 def parse(fileobject, schema=None):
     """Parses a file object
     
-    This functon parses a KML file object, and optionally validates it against 
+    This function parses a KML file object, and optionally validates it against 
     a provided schema.
     """
     if schema:
