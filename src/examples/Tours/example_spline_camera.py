@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 '''Example of generating transitions between camera locations using splines 
 
+Note that this example requires the scipy package
+    http://pypi.python.org/pypi/scipy
+
 References:
 
 '''
@@ -113,7 +116,7 @@ def create_camera_model_placemark(location):
             KML.Scale(
               KML.x(10),
               KML.y(10),
-              KML.z(10),
+              KML.z(-10),
             ),
             KML.Link(
               KML.href('models/three_unit_lines.dae'),
@@ -226,7 +229,7 @@ def main():
         # outside GWC-1
         {'loc':Location(
             longitude=-122.0916728, latitude=37.42329373, altitude=2, 
-            heading=126, tilt=80, roll=0, range=25,
+            heading=0, tilt=0, roll=0, range=25,
             ),
          'time':datetime.strptime('2011-01-01','%Y-%m-%d'),},
         # over building
