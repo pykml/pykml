@@ -2,6 +2,7 @@ import unittest
 from os import path
 from pykml.parser import Schema
 from pykml.parser import parse
+from pykml.factory import KML_ElementMaker as KML
 
 class KmlUtilTestCase(unittest.TestCase):
     
@@ -29,7 +30,6 @@ class KmlUtilTestCase(unittest.TestCase):
         self.assertEqual(2,
             summary['http://www.google.com/kml/ext/2.2']['Wait']
         )
-        
     
     def test_wrap_angle180(self):
         """Tests the wrap_angle180 utility function."""
@@ -40,4 +40,64 @@ class KmlUtilTestCase(unittest.TestCase):
         self.assertEqual(wrap_angle180(361), 1)
         # test passing an array
         self.assertEqual(wrap_angle180([0,180,361,]), [0,-180,1,])
+    
+    def test_to_wkt_list(self):
+        """Tests the to_wkt_list function."""
+        from pykml.util import to_wkt_list
         
+        # create a polygon
+        poly = KML.Polygon(
+            KML.extrude('1'),
+            KML.altitudeMode('relativeToGround'),
+            KML.outerBoundaryIs(
+              KML.LinearRing(
+                KML.coordinates(
+                '-122.366278,37.818844,30 '
+                '-122.365248,37.819267,30 '
+                '-122.365640,37.819861,30 '
+                '-122.366669,37.819429,30 '
+                '-122.366278,37.818844,30 '
+                ),
+              ),
+            ),
+            KML.innerBoundaryIs(
+              KML.LinearRing(
+                KML.coordinates(
+                '-122.366212,37.818977,30 '
+                '-122.365424,37.819294,30 '
+                '-122.365704,37.819731,30 '
+                '-122.366212,37.818977,30 '
+                ),
+              ),
+            ),
+            KML.innerBoundaryIs(
+              KML.LinearRing(
+                KML.coordinates(
+                '-122.366212,37.818977,30 '
+                '-122.365704,37.819731,30 '
+                '-122.366488,37.819402,30 '
+                '-122.366212,37.818977,30 '
+                ),
+              ),
+            ),
+          )
+        
+        poly_wkt_list = to_wkt_list(poly)
+        
+        self.assertEqual(len(poly_wkt_list), 1)
+        self.assertEqual(
+            poly_wkt_list[0], 
+            ('POLYGON ((-122.366278 37.818844 30, '
+                       '-122.365248 37.819267 30, '
+                       '-122.365640 37.819861 30, '
+                       '-122.366669 37.819429 30, '
+                       '-122.366278 37.818844 30), '
+                      '(-122.366212 37.818977 30, '
+                       '-122.365424 37.819294 30, '
+                       '-122.365704 37.819731 30, '
+                       '-122.366212 37.818977 30), '
+                      '(-122.366212 37.818977 30, '
+                       '-122.365704 37.819731 30, '
+                       '-122.366488 37.819402 30, '
+                       '-122.366212 37.818977 30))')
+        )
