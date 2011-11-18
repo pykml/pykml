@@ -40,9 +40,43 @@ class KmlUtilTestCase(unittest.TestCase):
         self.assertEqual(wrap_angle180(361), 1)
         # test passing an array
         self.assertEqual(wrap_angle180([0,180,361,]), [0,-180,1,])
+
+    def test_to_wkt_list_simple_polygon(self):
+        """Tests the to_wkt_list function for a polygon with inner rings."""
+        from pykml.util import to_wkt_list
+        
+        # create a polygon
+        poly = KML.Polygon(
+            KML.extrude('1'),
+            KML.altitudeMode('relativeToGround'),
+            KML.outerBoundaryIs(
+              KML.LinearRing(
+                KML.coordinates(
+                '-122.366278,37.818844,30 '
+                '-122.365248,37.819267,30 '
+                '-122.365640,37.819861,30 '
+                '-122.366669,37.819429,30 '
+                '-122.366278,37.818844,30 '
+                ),
+              ),
+            ),
+          )
+        
+        poly_wkt_list = to_wkt_list(poly)
+        
+        self.assertEqual(len(poly_wkt_list), 1)
+        self.assertEqual(
+            poly_wkt_list[0], 
+            ('POLYGON ((-122.366278 37.818844 30, '
+                       '-122.365248 37.819267 30, '
+                       '-122.365640 37.819861 30, '
+                       '-122.366669 37.819429 30, '
+                       '-122.366278 37.818844 30))')
+        )
+
     
-    def test_to_wkt_list(self):
-        """Tests the to_wkt_list function."""
+    def test_to_wkt_list_complex_polygon(self):
+        """Tests the to_wkt_list function for a polygon with inner rings."""
         from pykml.util import to_wkt_list
         
         # create a polygon

@@ -60,7 +60,7 @@ def to_wkt_list(doc):
                         ring_coords_to_wkt(elem.outerBoundaryIs.LinearRing)
                     )
                 ]
-                for obj in elem.innerBoundaryIs:
+                for obj in elem.findall('{http://www.opengis.net/kml/2.2}innerBoundaryIs'):
                     ringlist.append(
                         '({0})'.format(
                             ring_coords_to_wkt(obj.LinearRing)
