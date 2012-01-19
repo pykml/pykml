@@ -1,5 +1,6 @@
 import unittest
 from os import path
+from lxml import etree
 from pykml.parser import Schema
 from pykml.parser import parse
 from pykml.factory import KML_ElementMaker as KML
@@ -135,3 +136,125 @@ class KmlUtilTestCase(unittest.TestCase):
                        '-122.366488 37.819402 30, '
                        '-122.366212 37.818977 30))')
         )
+
+    def test_format_as_cdata(self):
+        '''tests the format_as_cdata function'''
+        from pykml.util import format_as_cdata
+        
+        doc = KML.Placemark(
+            KML.description('<h1>test</h1>')
+        )
+        self.assertEqual(
+            format_as_cdata(etree.tostring(doc)),
+            '<Placemark xmlns:gx="http://www.google.com/kml/ext/2.2"'
+                        ' xmlns:atom="http://www.w3.org/2005/Atom"'
+                        ' xmlns="http://www.opengis.net/kml/2.2">'
+                '<description>'
+                    '<![CDATA[<h1>test</h1>]]>'
+                '</description>'
+            '</Placemark>'
+        )
+
+    def test_format_as_cdata_2(self):
+        '''tests that the format_as_cdata function does not affect text
+        that is already formatted as CDATA'''
+        from pykml.util import format_as_cdata
+        
+        doc = KML.Placemark(
+            KML.description('<h1>test</h1>')
+        )
+        self.assertEqual(
+            format_as_cdata(format_as_cdata(etree.tostring(doc))),
+            '<Placemark xmlns:gx="http://www.google.com/kml/ext/2.2"'
+                        ' xmlns:atom="http://www.w3.org/2005/Atom"'
+                        ' xmlns="http://www.opengis.net/kml/2.2">'
+                '<description>'
+                    '<![CDATA[<h1>test</h1>]]>'
+                '</description>'
+            '</Placemark>'
+        )
+    
+    def test_convert_csv_to_kml(self):
+        """Tests the convert_csv_to_kml function"""
+        import tempfile
+        from pykml.util import convert_csv_to_kml
+        from pykml.util import format_as_cdata
+        
+        # create a CSV file for testing
+        csvfile = tempfile.TemporaryFile()
+        csvfile.write('name,snippet,lat,lon\n')
+        csvfile.write('first,The first one,45.0,-90.0\n')
+        csvfile.write('second,The second one,46.0,-89.0\n')
+        csvfile.write('third,"The third one (with quotes)",45.0,-88.0\n')
+        csvfile.seek(0)
+        
+        kmldoc = convert_csv_to_kml(csvfile)
+        
+        csvfile.close()
+        
+        self.assertEqual(
+            format_as_cdata(etree.tostring(kmldoc)),
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
+                 'xmlns:atom="http://www.w3.org/2005/Atom" '
+                 'xmlns="http://www.opengis.net/kml/2.2">'
+                 '<Document>'
+                    '<Folder>'
+                        '<name>KmlFile</name>'
+                        '<Placemark>'
+                            '<name>first</name>'
+                            '<Snippet maxLines="2">The first one</Snippet>'
+                            '<description>'
+                                '<![CDATA['
+                                  '<table border="1"'
+                                    '<tr><th>snippet</th><td>The first one</td></tr>'
+                                    '<tr><th>lat</th><td>45.0</td></tr>'
+                                    '<tr><th>lon</th><td>-90.0</td></tr>'
+                                    '<tr><th>name</th><td>first</td></tr>'
+                                  '</table>'
+                                ']]>'
+                            '</description>'
+                            '<Point>'
+                                '<coordinates>-90.0,45.0</coordinates>'
+                            '</Point>'
+                        '</Placemark>'
+                        '<Placemark>'
+                            '<name>second</name>'
+                            '<Snippet maxLines="2">The second one</Snippet>'
+                            '<description><![CDATA[<table border="1"<tr><th>snippet</th><td>The second one</td></tr><tr><th>lat</th><td>46.0</td></tr><tr><th>lon</th><td>-89.0</td></tr><tr><th>name</th><td>second</td></tr></table>]]></description>'
+                            '<Point>'
+                                '<coordinates>-89.0,46.0</coordinates>'
+                            '</Point>'
+                        '</Placemark>'
+                        '<Placemark>'
+                            '<name>third</name>'
+                            '<Snippet maxLines="2">The third one (with quotes)</Snippet>'
+                            '<description><![CDATA[<table border="1"<tr><th>snippet</th><td>The third one (with quotes)</td></tr><tr><th>lat</th><td>45.0</td></tr><tr><th>lon</th><td>-88.0</td></tr><tr><th>name</th><td>third</td></tr></table>]]></description>'
+                            '<Point>'
+                                '<coordinates>-88.0,45.0</coordinates>'
+                            '</Point>'
+                        '</Placemark>'
+                    '</Folder>'
+                '</Document>'
+            '</kml>'
+        )
+    
+    def test_convert_csv_to_kml_missing_coordinate_fields(self):
+        """Tests the convert_csv_to_kml function"""
+        import tempfile
+        from pykml.util import convert_csv_to_kml
+        
+        # create a CSV file for testing
+        csvfile = tempfile.TemporaryFile()
+        csvfile.write('name,snippet,y,x\n')
+        csvfile.write('first,The first one,45.0,-90.0\n')
+        csvfile.write('second,The second one,46.0,-89.0\n')
+        csvfile.seek(0)
+        
+        try:
+            convert_csv_to_kml(csvfile)
+        except KeyError:
+            self.assertTrue(True)
+        except:
+            raise
+        finally:
+            csvfile.close()

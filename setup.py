@@ -58,6 +58,7 @@ See the Package Documentation for information on installation and usage.
     entry_points = {
         'console_scripts': [
             'kml2pykml = pykml.factory:kml2pykml',
+            'csv2kml = pykml.util:csv2kml',
         ],
     }
 )
