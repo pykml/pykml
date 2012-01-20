@@ -5,6 +5,11 @@ documents
 """
 import re
 
+def clean_xml_string(input_string):
+    '''removes invalid characters from an XML string'''
+    from curses import ascii
+    return ''.join(c for c in input_string if ascii.isascii(c))
+
 def format_as_cdata(xmlstr):
     "format the text of selected KML elements as CDATA"
     
@@ -204,17 +209,23 @@ def convert_csv_to_kml(
     for row in csvdoc:
         pm = KML.Placemark()
         if row.has_key(name_field):
-            pm.append(KML.name(row[name_field]))
+            pm.append(
+                KML.name(clean_xml_string(row[name_field]))
+            )
         if row.has_key(snippet_field):
-            pm.append(KML.Snippet(row[snippet_field],maxLines="2"))
+            pm.append(
+                KML.Snippet(clean_xml_string(row[snippet_field]),maxLines="2")
+            )
         if row.has_key(description_field):
-            pm.append(KML.description(row[description_field]))
+            pm.append(
+                KML.description(clean_xml_string(row[description_field]))
+            )
         else:
             desc = '<table border="1"'
             for key,val in row.iteritems():
                 desc += '<tr><th>{0}</th><td>{1}</td></tr>'.format(key,val)
             desc += '</table>'
-            pm.append(KML.description(desc))
+            pm.append(KML.description(clean_xml_string(desc)))
         
         coord_list = [row[longitude_field], row[latitude_field]]
         if row.has_key(altitude_field):

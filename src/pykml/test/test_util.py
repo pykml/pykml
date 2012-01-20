@@ -258,3 +258,8 @@ class KmlUtilTestCase(unittest.TestCase):
             raise
         finally:
             csvfile.close()
+
+    def test_clean_xml_string(self):
+        from pykml.util import clean_xml_string
+        self.assertEqual(clean_xml_string('\xce'),'')
+        #self.assertEqual(clean_xml_string('Grande-\xcele'),'Grande-le')
