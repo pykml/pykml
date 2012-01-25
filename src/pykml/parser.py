@@ -7,6 +7,8 @@ import os
 import urllib2
 from lxml import etree, objectify
 
+OGCKML_SCHEMA = 'http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd'
+
 class Schema():
     "A class representing an XML Schema used to validate KML documents"
     def __init__(self, schema):
@@ -61,3 +63,60 @@ def parse(fileobject, schema=None):
         # without validation
         parser = objectify.makeparser(strip_cdata=False)
         return objectify.parse(fileobject, parser=parser)
+
+
+def validate_kml():
+    """Validate a KML file
+    
+    Example: validate_kml test.kml
+    """
+    import sys
+    from pykml.parser import parse
+    from optparse import OptionParser
+    
+    parser = OptionParser(
+        usage="usage: %prog FILENAME_or_URL",
+        version="%prog 0.1",
+    )
+    parser.add_option("--schema", dest="schema_uri",
+                  help="URI of the XML Schema Document used for validation")
+    (options, args) = parser.parse_args()
+    if len(args) != 1:
+        parser.error("wrong number of arguments")
+    else:
+        uri = args[0]
+    
+    try:
+        # try to open as a file
+        fileobject = open(uri)
+    except IOError:
+        try:
+            fileobject = urllib2.urlopen(uri)
+        except ValueError:
+            raise ValueError('Unable to load URI {0}'.format(uri))
+    except:
+        raise
+    
+    doc = parse(fileobject, schema=None)
+    
+    if options.schema_uri:
+        schema = Schema(options.schema_uri)
+    else:
+        # by default, use the OGC base schema
+        sys.stdout.write("Validating against the default schema: {0}\n".format(OGCKML_SCHEMA))
+        schema = Schema(OGCKML_SCHEMA)
+    
+    sys.stdout.write("Validating document...\n")
+    if schema.validate(doc):
+        sys.stdout.write("Congratulations! The file is valid.\n")
+    else:
+        sys.stdout.write("Uh-oh! The KML file is invalid.\n")
+        sys.stdout.write(schema.assertValid(doc))
+    # close the fileobject, if needed
+    try:
+        fileobject
+    except NameError:
+        pass #variable was not defined
+    else:
+        fileobject.close
+    

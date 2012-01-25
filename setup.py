@@ -59,6 +59,7 @@ See the Package Documentation for information on installation and usage.
         'console_scripts': [
             'kml2pykml = pykml.factory:kml2pykml',
             'csv2kml = pykml.util:csv2kml',
+            'validate_kml = pykml.parser:validate_kml',
         ],
     }
 )
