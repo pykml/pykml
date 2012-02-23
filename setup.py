@@ -1,5 +1,8 @@
-from setuptools import setup, find_packages
 import sys, os
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 version = '0.1.1'
 
@@ -18,13 +21,12 @@ setup(
         ],
     },
     install_requires=[
-        'setuptools',
         'lxml>=2.2.6',
     ],
     tests_require=['nose'],
-    #test_suite='nose.collector',
     description="Python KML library",
     classifiers=[
+        # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Programming Language :: Python',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
@@ -35,7 +37,7 @@ setup(
         'Topic :: Scientific/Engineering :: GIS',
         'Topic :: Scientific/Engineering :: Visualization',
         'Topic :: Software Development :: Libraries :: Python Modules',
-    ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    ],
     keywords='kml',
     author='Tyler Erickson',
     author_email='tylerickson@gmail.com',
