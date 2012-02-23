@@ -22,10 +22,12 @@ def format_xml_with_cdata(
     #Create an xpath expression to search for all desired cdata elements
     xpath = '|'.join(map(lambda tag: '//kml:' + tag, cdata_elements))
     
-    results = root.xpath(xpath, namespaces = {'kml': 'http://www.opengis.net/kml/2.2'})
+    results = root.xpath(
+        xpath,
+        namespaces = {'kml': 'http://www.opengis.net/kml/2.2'}
+    )
     for element in results:
         element.text = etree.CDATA(element.text)
-    
     return root
 
 def count_elements(doc):
