@@ -3,6 +3,7 @@
 The pykml.parser module provides functions that can be used to parse KML 
 from a file or remote URL.
 '''
+import sys
 import os
 import urllib2
 from lxml import etree, objectify
@@ -70,7 +71,6 @@ def validate_kml():
     
     Example: validate_kml test.kml
     """
-    import sys
     from pykml.parser import parse
     from optparse import OptionParser
     
