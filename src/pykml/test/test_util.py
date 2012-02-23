@@ -136,49 +136,46 @@ class KmlUtilTestCase(unittest.TestCase):
                        '-122.366488 37.819402 30, '
                        '-122.366212 37.818977 30))')
         )
-
-    def test_format_as_cdata(self):
+    
+    def test_getXmlWithCDATA(self):
         '''tests the format_as_cdata function'''
-        from pykml.util import format_as_cdata
+        from pykml.util import format_xml_with_cdata
         
-        doc = KML.Placemark(
-            KML.description('<h1>test</h1>')
+        kmlobj = KML.kml(
+            KML.Document(
+                KML.Placemark(
+                    KML.name('foobar'),
+                    KML.styleUrl('#big_label'),
+                    KML.description('<html>'),
+                    KML.text('<html>'),
+                    KML.linkDescription('<html>'),
+                    KML.displayName('<html>')
+                )
+            )
         )
         self.assertEqual(
-            format_as_cdata(etree.tostring(doc)),
-            '<Placemark xmlns:gx="http://www.google.com/kml/ext/2.2"'
-                        ' xmlns:atom="http://www.w3.org/2005/Atom"'
-                        ' xmlns="http://www.opengis.net/kml/2.2">'
-                '<description>'
-                    '<![CDATA[<h1>test</h1>]]>'
-                '</description>'
-            '</Placemark>'
-        )
-
-    def test_format_as_cdata_2(self):
-        '''tests that the format_as_cdata function does not affect text
-        that is already formatted as CDATA'''
-        from pykml.util import format_as_cdata
-        
-        doc = KML.Placemark(
-            KML.description('<h1>test</h1>')
-        )
-        self.assertEqual(
-            format_as_cdata(format_as_cdata(etree.tostring(doc))),
-            '<Placemark xmlns:gx="http://www.google.com/kml/ext/2.2"'
-                        ' xmlns:atom="http://www.w3.org/2005/Atom"'
-                        ' xmlns="http://www.opengis.net/kml/2.2">'
-                '<description>'
-                    '<![CDATA[<h1>test</h1>]]>'
-                '</description>'
-            '</Placemark>'
+            etree.tostring(format_xml_with_cdata(kmlobj)),
+            '<kml xmlns:gx="http://www.google.com/kml/ext/2.2"'
+                          ' xmlns:atom="http://www.w3.org/2005/Atom"'
+                          ' xmlns="http://www.opengis.net/kml/2.2">'
+              '<Document>'
+                '<Placemark>'
+                  '<name>foobar</name>'
+                  '<styleUrl>#big_label</styleUrl>'
+                  '<description><![CDATA[<html>]]></description>'
+                  '<text><![CDATA[<html>]]></text>'
+                  '<linkDescription><![CDATA[<html>]]></linkDescription>'
+                  '<displayName><![CDATA[<html>]]></displayName>'
+                '</Placemark>'
+              '</Document>'
+            '</kml>'
         )
     
     def test_convert_csv_to_kml(self):
         """Tests the convert_csv_to_kml function"""
         import tempfile
         from pykml.util import convert_csv_to_kml
-        from pykml.util import format_as_cdata
+        from pykml.util import format_xml_with_cdata
         
         # create a CSV file for testing
         csvfile = tempfile.TemporaryFile()
@@ -193,7 +190,7 @@ class KmlUtilTestCase(unittest.TestCase):
         csvfile.close()
         
         self.assertEqual(
-            format_as_cdata(etree.tostring(kmldoc)),
+            etree.tostring(format_xml_with_cdata(kmldoc)),
             '<kml xmlns:gx="http://www.google.com/kml/ext/2.2" '
                  'xmlns:atom="http://www.w3.org/2005/Atom" '
                  'xmlns="http://www.opengis.net/kml/2.2">'

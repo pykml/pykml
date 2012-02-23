@@ -10,38 +10,24 @@ def clean_xml_string(input_string):
     from curses import ascii
     return ''.join(c for c in input_string if ascii.isascii(c))
 
-def format_as_cdata(xmlstr):
-    "format the text of selected KML elements as CDATA"
+def format_xml_with_cdata(
+        obj, 
+        cdata_elements = ['description', 'text', 'linkDescription', 'displayName']
+    ):
+    from lxml import etree
+
+    # Convert Objectify document to lxml.etree (is there a better way?)
+    root = etree.fromstring(etree.tostring(etree.ElementTree(obj)))
     
-    TEXT_ELEMENTS = [
-        'description',
-        'text',
-        'linkDescription',
-        'displayName',
-    ]
+    #Create an xpath expression to search for all desired cdata elements
+    xpath = '|'.join(map(lambda tag: '//kml:' + tag, cdata_elements))
     
-    def unescape_element_text(matchobj):
-        if matchobj.group(2)[:9] == '<![CDATA[' and matchobj.group(2)[-3:] == ']]>':
-            # if the text is already formatted as CDATA, just return it
-            return matchobj.group(0)
-        else:
-            return '{opening}<![CDATA[{content}]]>{closing}'.format(
-                    opening = matchobj.group(1),
-                    content = matchobj.group(2).replace('&amp;','&'
-                                              ).replace('&lt;','<'
-                                              ).replace('&gt;','>'),
-                    closing = matchobj.group(3),
-                )
+    results = root.xpath(xpath, namespaces = {'kml': 'http://www.opengis.net/kml/2.2'})
+    for element in results:
+        element.text = etree.CDATA(element.text)
     
-    for element in TEXT_ELEMENTS:
-        # replace element text with unescaped text
-        xmlstr = re.sub(
-            pattern = r'(<{0}.*?>)(.*?)(</{0}>)'.format(element),
-            repl = unescape_element_text,
-            string = xmlstr,
-        )
-    return xmlstr
-    
+    return root
+
 def count_elements(doc):
     "Counts the number of times each element is used in a document"
     summary = {}
@@ -244,8 +230,8 @@ def csv2kml():
     
     Example: csv2kml test.csv
     """
+    import sys
     import urllib2
-    from pykml.parser import parse
     from optparse import OptionParser
     from lxml import etree
     
@@ -271,8 +257,8 @@ def csv2kml():
     else:
         uri = args[0]
     
+    # try to open the URI as both a local file and a remote URL
     try:
-        # try to open as a file
         f = open(uri)
     except IOError:
         try:
@@ -300,6 +286,4 @@ def csv2kml():
         f.close
     
     kmlstr = format_as_cdata(etree.tostring(kmldoc, pretty_print=True))
-    #return kmlstr
-    import sys
     sys.stdout.write(kmlstr)
