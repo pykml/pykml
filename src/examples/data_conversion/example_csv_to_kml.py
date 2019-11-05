@@ -89,4 +89,4 @@ from pykml.parser import Schema
 schema_gx = Schema("kml22gx.xsd")
 schema_gx.assertValid(doc)
 
-print etree.tostring(doc, pretty_print=True)
+print(etree.tostring(doc, pretty_print=True))
