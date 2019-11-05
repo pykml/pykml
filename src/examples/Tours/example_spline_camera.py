@@ -301,7 +301,7 @@ def main():
         GX.Tour(playlist),
     )
     
-    print etree.tostring(fld, pretty_print=True)
+    print(etree.tostring(fld, pretty_print=True))
 
     
 if __name__=='__main__':
