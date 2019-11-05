@@ -273,7 +273,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             '    ),\n'
             '  ),\n'
             ')\n'
-            'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
+            'print(etree.tostring(etree.ElementTree(doc),pretty_print=True))\n'
         )
 
     def test_write_python_script_for_multiline_coordinate_string(self):
@@ -320,7 +320,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
 '    ),\n'
 '  ),\n'
 ')\n'
-'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
+'print(etree.tostring(etree.ElementTree(doc),pretty_print=True))\n'
         )
 
 
@@ -364,11 +364,11 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
             '    ),\n'
             '  ),\n'
             ')\n'
-            'print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n'
+            'print(etree.tostring(etree.ElementTree(doc),pretty_print=True))\n'
         )
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')
-        #print tfile
+        #print(tfile)
         with open(tfile, 'w') as f:
             f.write(script)
         
@@ -411,7 +411,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')
-        #print tfile  #uncomment to print the temporary filename
+        #print(tfile)  #uncomment to print the temporary filename
         with open(tfile, 'w') as f:
             f.write(script)
         
@@ -424,7 +424,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
                                     os.path.join(path.dirname(__file__),'../..')
                                 )
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
-        #print temp_kml_file
+        #print(temp_kml_file)
         with open(temp_kml_file, 'w') as f:
             exit_code = subprocess.call(["python",tfile], stdout=f, env=current_env)
         self.assertEqual(exit_code, 0)
@@ -453,7 +453,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
         
         # create a temporary python file
         handle, tfile = tempfile.mkstemp(suffix='.py')
-        #print tfile  # Useful for debugging
+        #print(tfile)  # Useful for debugging
         with open(tfile, 'w') as f:
             f.write(script)
         
@@ -464,7 +464,7 @@ class GeneratePythonScriptTestCase(unittest.TestCase):
                                     os.path.join(path.dirname(__file__),'../..')
                                 )
         handle, temp_kml_file = tempfile.mkstemp(suffix='.kml')
-        #print temp_kml_file  # Useful for debugging
+        #print(temp_kml_file)  # Useful for debugging
         with open(temp_kml_file, 'w') as f:
             exit_code = subprocess.call(["python",tfile], stdout=f, env=current_env)
         self.assertEqual(exit_code, 0)
