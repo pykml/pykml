@@ -8,7 +8,7 @@ Some documentation text.
 
 .. doctest:: test1
 
-   >>> print 1
+   >>> print(1)
    1
 
 Some more documentation text.
