@@ -177,7 +177,7 @@ def write_python_script_for_kml_document(doc):
         ))
     
     # add python code to print out the KML document
-    output.write('print etree.tostring(etree.ElementTree(doc),pretty_print=True)\n')
+    output.write('print(etree.tostring(etree.ElementTree(doc),pretty_print=True))\n')
     
     contents = output.getvalue()
     output.close()
@@ -213,4 +213,4 @@ def kml2pykml():
                 pass #variable was not defined
             else:
                 f.close
-    print write_python_script_for_kml_document(doc)
+    print(write_python_script_for_kml_document(doc))
