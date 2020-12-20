@@ -39,16 +39,20 @@ class Schema():
         """
         return self.schema.assertValid(doc)
 
-def fromstring(text, schema=None):
+def fromstring(text, schema=None, huge_tree=False):
     """Parses a KML text string
     
     This function parses a KML text string and optionally validates it against 
     a provided schema object"""
     if schema:
-        parser = objectify.makeparser(schema = schema.schema)
-        return objectify.fromstring(text, parser=parser)
+        parser = objectify.makeparser(schema = schema.schema, huge_tree=huge_tree)
     else:
-        return objectify.fromstring(text)
+        parser = objectify.makeparser(huge_tree=huge_tree)
+    try:
+        return objectify.fromstring(text, parser=parser)
+    except etree.XMLSyntaxError as e:
+        print("You may want to set huge_tree=True")
+        raise e
 
 def parse(fileobject, schema=None):
     """Parses a file object
